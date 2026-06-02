@@ -83,7 +83,7 @@ def setup_upload(tmpdir: py.path.local):
 
 
 def _data_converter_installed():
-    data_converter_path = os.getenv("MAPILLARY_TOOLS_FFMPEG_PATH", "data_converter")
+    data_converter_path = os.getenv("MAPILLARY_TOOLS_FFMPEG_PATH", "ffmpeg")
     ffprobe_path = os.getenv("MAPILLARY_TOOLS_FFPROBE_PATH", "ffprobe")
     try:
         subprocess.run(

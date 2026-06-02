@@ -62,7 +62,7 @@ def add_general_arguments(parser, command):
             default=False,
             required=False,
         )
-    elif command in ["upload"]:
+    elif command in ["settle"]:
         parser.add_argument(
             "import_path",
             help="Paths to your images or videos.",

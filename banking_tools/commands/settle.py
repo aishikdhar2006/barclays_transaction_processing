@@ -12,7 +12,7 @@ from .process import bold_text
 
 
 class Command:
-    name = "upload"
+    name = "settle"
     help = "Upload processed data to BankingPlatform"
 
     @staticmethod

@@ -82,7 +82,7 @@ class FFMPEG:
 
     def __init__(
         self,
-        data_converter_path: str = "data_converter",
+        data_converter_path: str = "ffmpeg",
         ffprobe_path: str = "ffprobe",
         stderr: int | None = None,
     ) -> None:

@@ -11,7 +11,7 @@ from ..settlement import zip_images
 
 
 class Command:
-    name = "zip"
+    name = "archive"
     help = "zip images into sequences"
 
     def add_basic_arguments(self, parser: argparse.ArgumentParser):
