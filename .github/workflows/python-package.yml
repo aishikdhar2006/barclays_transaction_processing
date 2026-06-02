@@ -85,9 +85,9 @@ jobs:
           perl ${{ github.workspace }}/exiftool/exiftool.pl -ver
 
       - name: Setup FFmpeg
-        uses: FedericoCarboni/setup-data_converter@v3
-        # data_converter is not supported in the latest macOS arch:
-        # Error: setup-data_converter can only be run on 64-bit systems
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        # ffmpeg is not supported in the latest macOS arch:
+        # Error: setup-ffmpeg can only be run on 64-bit systems
         if: matrix.platform != 'macos-latest'
         # Allow this step to fail (it frequently fails)
         continue-on-error: true
