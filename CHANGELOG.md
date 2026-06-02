@@ -7,55 +7,55 @@ LICENSE file in the root directory of this source tree.
 
 # Changelog
 
-Check the release page for changelogs: https://github.com/mapillary/mapillary_tools/releases
+Check the release page for changelogs: https://github.com/banking/banking_tools/releases
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.9.0](https://github.com/mapillary/mapillary_tools/compare/v0.8.2...v0.9.0) (2022-07-23)
+## [0.9.0](https://github.com/banking/banking_tools/compare/v0.8.2...v0.9.0) (2022-07-23)
 
 
 ### Features
 
-* Enable upload history and duplication check ([#497](https://github.com/mapillary/mapillary_tools/issues/497)) ([ee40cfa](https://github.com/mapillary/mapillary_tools/commit/ee40cfa96e5deb5577e5bbc82eb9baa584bf8932))
-* [experimental] Add CAMM camera support https://github.com/mapillary/mapillary_tools/pull/515
+* Enable upload history and duplication check ([#497](https://github.com/banking/banking_tools/issues/497)) ([ee40cfa](https://github.com/banking/banking_tools/commit/ee40cfa96e5deb5577e5bbc82eb9baa584bf8932))
+* [experimental] Add CAMM camera support https://github.com/banking/banking_tools/pull/515
 
 ### Improvement
 
-* Clarify a few command line options in the help page (--help) https://github.com/mapillary/mapillary_tools/pull/509
-* Remove pymp4 https://github.com/mapillary/mapillary_tools/pull/506
+* Clarify a few command line options in the help page (--help) https://github.com/banking/banking_tools/pull/509
+* Remove pymp4 https://github.com/banking/banking_tools/pull/506
 
 ### Bug Fixes
 
-* subprocess processing temporary file in Windows ([#510](https://github.com/mapillary/mapillary_tools/issues/510)) ([2902606](https://github.com/mapillary/mapillary_tools/commit/2902606ec8bbf3309761dd9dd9efaaf55a2d423b))
-* upload blackvue in subfolders ([#501](https://github.com/mapillary/mapillary_tools/issues/501)) ([4bfebf8](https://github.com/mapillary/mapillary_tools/commit/4bfebf8705d06d8568619cc0c6b83fd3d4fad95e))
+* subprocess processing temporary file in Windows ([#510](https://github.com/banking/banking_tools/issues/510)) ([2902606](https://github.com/banking/banking_tools/commit/2902606ec8bbf3309761dd9dd9efaaf55a2d423b))
+* upload blackvue in subfolders ([#501](https://github.com/banking/banking_tools/issues/501)) ([4bfebf8](https://github.com/banking/banking_tools/commit/4bfebf8705d06d8568619cc0c6b83fd3d4fad95e))
 
-### [0.8.2](https://github.com/mapillary/mapillary_tools/compare/v0.8.1...v0.8.2) (2022-02-11)
+### [0.8.2](https://github.com/banking/banking_tools/compare/v0.8.1...v0.8.2) (2022-02-11)
 
 
 ### Features
 
-* add commands for uploading blackvue/zip directories ([#499](https://github.com/mapillary/mapillary_tools/issues/499)) ([356263d](https://github.com/mapillary/mapillary_tools/commit/356263d49450b5f2636e45ef4471aaef06ee7c6a))
+* add commands for uploading blackvue/zip directories ([#499](https://github.com/banking/banking_tools/issues/499)) ([356263d](https://github.com/banking/banking_tools/commit/356263d49450b5f2636e45ef4471aaef06ee7c6a))
 
 
 ### Bug Fixes
 
-* set timeout for requests ([#495](https://github.com/mapillary/mapillary_tools/issues/495)) ([f51fd0f](https://github.com/mapillary/mapillary_tools/commit/f51fd0f689b90c5e31264d68bb1f5c6388a05ae1))
-* wrong module path in setup.py ([#493](https://github.com/mapillary/mapillary_tools/issues/493)) ([8db1667](https://github.com/mapillary/mapillary_tools/commit/8db16670b1520b2b40d841a500524f764414f932))
+* set timeout for requests ([#495](https://github.com/banking/banking_tools/issues/495)) ([f51fd0f](https://github.com/banking/banking_tools/commit/f51fd0f689b90c5e31264d68bb1f5c6388a05ae1))
+* wrong module path in setup.py ([#493](https://github.com/banking/banking_tools/issues/493)) ([8db1667](https://github.com/banking/banking_tools/commit/8db16670b1520b2b40d841a500524f764414f932))
 
-### [0.8.2](https://github.com/mapillary/mapillary_tools/compare/v0.8.1...v0.8.2) (2022-02-11)
+### [0.8.2](https://github.com/banking/banking_tools/compare/v0.8.1...v0.8.2) (2022-02-11)
 
 
 ### Features
 
-* add commands for uploading blackvue/zip directories ([#499](https://github.com/mapillary/mapillary_tools/issues/499)) ([356263d](https://github.com/mapillary/mapillary_tools/commit/356263d49450b5f2636e45ef4471aaef06ee7c6a))
+* add commands for uploading blackvue/zip directories ([#499](https://github.com/banking/banking_tools/issues/499)) ([356263d](https://github.com/banking/banking_tools/commit/356263d49450b5f2636e45ef4471aaef06ee7c6a))
 
 
 ### Bug Fixes
 
-* set timeout for requests ([#495](https://github.com/mapillary/mapillary_tools/issues/495)) ([f51fd0f](https://github.com/mapillary/mapillary_tools/commit/f51fd0f689b90c5e31264d68bb1f5c6388a05ae1))
-* wrong module path in setup.py ([#493](https://github.com/mapillary/mapillary_tools/issues/493)) ([8db1667](https://github.com/mapillary/mapillary_tools/commit/8db16670b1520b2b40d841a500524f764414f932))
+* set timeout for requests ([#495](https://github.com/banking/banking_tools/issues/495)) ([f51fd0f](https://github.com/banking/banking_tools/commit/f51fd0f689b90c5e31264d68bb1f5c6388a05ae1))
+* wrong module path in setup.py ([#493](https://github.com/banking/banking_tools/issues/493)) ([8db1667](https://github.com/banking/banking_tools/commit/8db16670b1520b2b40d841a500524f764414f932))
 
-## [0.8.1](https://github.com/mapillary/mapillary_tools/compare/v0.8.0...v0.8.1) (2021-12-30)
+## [0.8.1](https://github.com/banking/banking_tools/compare/v0.8.0...v0.8.1) (2021-12-30)
 
 
 ### Features
@@ -74,12 +74,12 @@ All notable changes to this project will be documented in this file. See [standa
 * Default camera angle to 0 before applying offset_angle
 * Extract model/device from EXIF when geotag from gpx #469
 * Show tqdm when log level is lower than DEBUG (#479)
-* Process only specified video sample images in video_process (#480)
+* Process only specified video sample images in batch_process (#480)
 * EXIF read related fixes (#490)
   * Write MAPAltitude in image description
   * Return None instead of 0, if the rational denominator is 0 when reading float values, e.g. GPS, directions, etc.
   * A workaround that fixes GoPro HERO 9 subseconds reading
-* Delete invalid tags before writing exif ([#489](https://github.com/mapillary/mapillary_tools/issues/489)) ([b6a18ea](https://github.com/mapillary/mapillary_tools/commit/b6a18ea6135584d220e8f4a68471cc3244428daa))
+* Delete invalid tags before writing exif ([#489](https://github.com/banking/banking_tools/issues/489)) ([b6a18ea](https://github.com/banking/banking_tools/commit/b6a18ea6135584d220e8f4a68471cc3244428daa))
 
 ### Breaking changes
 
@@ -89,14 +89,14 @@ All notable changes to this project will be documented in this file. See [standa
 * Remove --organization_username
 
 ### Improvement
-* Hide banner in ffmpeg and ffprobe (#474)
+* Hide banner in data_converter and ffprobe (#474)
 
 ## 0.0.0 (2018-05-30)
 
 
 ### Breaking changes
 
-* The library has been rewritten for this initial release. The library usage is different from before. Refer to the documentation in the [README](https://github.com/mapillary/mapillary_tools/blob/mapillary_tools_v2/README.md) for instructions on requirement installation and usage. Due to an incompatible logging procedure, previous tools need to be used to finish uploading any sequences that were partially uploaded with the previous tools.
+* The library has been rewritten for this initial release. The library usage is different from before. Refer to the documentation in the [README](https://github.com/banking/banking_tools/blob/banking_tools_v2/README.md) for instructions on requirement installation and usage. Due to an incompatible logging procedure, previous tools need to be used to finish uploading any sequences that were partially uploaded with the previous tools.
 
 ### Features and improvements
 * Improved authentication procedure
@@ -106,9 +106,9 @@ All notable changes to this project will be documented in this file. See [standa
 * Modules can be imported in Python to enable easier development of custom process and/or upload scripts
 
 ### Bug fixes
-* Inadequate README [#219](https://github.com/mapillary/mapillary_tools/issues/219), [#180](https://github.com/mapillary/mapillary_tools/issues/180), [#159](https://github.com/mapillary/mapillary_tools/issues/159), [#229](https://github.com/mapillary/mapillary_tools/issues/229), [#226](https://github.com/mapillary/mapillary_tools/issues/226), [#157](https://github.com/mapillary/mapillary_tools/issues/157)
-* Removal of obsolete scripts [#162](https://github.com/mapillary/mapillary_tools/issues/162)
-* Inadequate logging [#63](https://github.com/mapillary/mapillary_tools/issues/63)
+* Inadequate README [#219](https://github.com/banking/banking_tools/issues/219), [#180](https://github.com/banking/banking_tools/issues/180), [#159](https://github.com/banking/banking_tools/issues/159), [#229](https://github.com/banking/banking_tools/issues/229), [#226](https://github.com/banking/banking_tools/issues/226), [#157](https://github.com/banking/banking_tools/issues/157)
+* Removal of obsolete scripts [#162](https://github.com/banking/banking_tools/issues/162)
+* Inadequate logging [#63](https://github.com/banking/banking_tools/issues/63)
 
 
 ## 0.0.1 (2018-06-04)
@@ -143,7 +143,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## 0.1.4 (2018-08-14)
 
 ### Bug fixes
-* Create .mapillary folder for image copies in case of passing `--keep_original`
+* Create .banking folder for image copies in case of passing `--keep_original`
 * Add missing global variable EPOCH in interpolation
 
 ### Features and improvements
@@ -158,7 +158,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## 0.1.6 (2018-08-29)
 
 ### Features and improvements
-* Sample video frames into a made up sub directory `.mapillary/sampled_video_frames/"video filename"`, either where the video is located or in the import path if it is specified.
+* Sample video frames into a made up sub directory `.banking/sampled_video_frames/"video filename"`, either where the video is located or in the import path if it is specified.
 * Add command line arguments for `user_name`, `user_email` and `user_password` for `authenticate` command, in order to avoid the prompt.
 
 ## 0.1.7 (2018-09-18)
@@ -184,17 +184,17 @@ All notable changes to this project will be documented in this file. See [standa
 * Enable specification of a time offset in case of already geotagged images
 * Add better progress bars and information output in process
 * Support Blackvue videos with embedded gps data
-* Add a simple `download` command to download all the blurred imaged from Mapillary for a certain `import_path`
+* Add a simple `download` command to download all the blurred imaged from BankingPlatform for a certain `import_path`
 * Support import of multiple videos
 
 ### Breaking changes
 * Argument `--video_file` was renamed to `--video_import_path` as directories of one or more videos can now be processed and uploaded. Note that even if one video is to be processed and uploaded, the directory of the video should be specified as the video import path and not the video file itself.
-* Only the Image Description EXIF tag is overwritten with the mapillary image description which includes all the data obtained during the `process` command. If one would like the rest of the tags to be overwritten, an additional argument needs to be passed under advanced usage. Single specific tags can also be overwritten by additional specific corresponding arguments.
+* Only the Image Description EXIF tag is overwritten with the banking image description which includes all the data obtained during the `process` command. If one would like the rest of the tags to be overwritten, an additional argument needs to be passed under advanced usage. Single specific tags can also be overwritten by additional specific corresponding arguments.
 
 ## 0.3.1 (2018-12-10)
 
 ### Features and improvements
-* mapillary_tools available to be downloaded and installed as a package
+* banking_tools available to be downloaded and installed as a package
 
 ## 0.4.0 (2019-01-10)
 
@@ -215,17 +215,17 @@ All notable changes to this project will be documented in this file. See [standa
 ## 0.4.1 (2018-01-22)
 
 ### Features and improvements
- * Fix ipc exif encoding to support desktop uploader
+ * Fix ipc exif encoding to support desktop processor
 
 ## 0.4.2 (2018-01-25)
 
 ### Features and improvements
- * Enable JWT authentication to support desktop uploader
+ * Enable JWT authentication to support desktop processor
 
 ## 0.5.0 (2019-03-28)
 
 ### Features and improvements
-* Added command to upload Blackvue DR900S videos directly to Mapillary
+* Added command to upload Blackvue DR900S videos directly to BankingPlatform
 * Added download of blurred images uploaded by the authenticated user
 * Allow GPX files without altitude data
 * More robust support of irregular time formats in EXIF
@@ -262,8 +262,8 @@ Major changes:
 
 Fixes:
 - Fix process_csv #400
-- Fix video_process for blackvue videos #397
-- Fix sub_sec field https://github.com/mapillary/mapillary_tools/issues/388
+- Fix batch_process for blackvue videos #397
+- Fix sub_sec field https://github.com/banking/banking_tools/issues/388
 
 Improvement:
 - Remove PIL as a dependency #401
@@ -282,7 +282,7 @@ Major changes:
 
 Fixes:
 - Fix processing JPEG that has invalid thumbnail data in EXIF #415
-- Fix Mapillary Tools version in EXIF #409
+- Fix BankingPlatform Tools version in EXIF #409
 - Fix None columns when processing CSV #406
 
 Improvement:
@@ -345,6 +345,6 @@ Fixes:
 
 ## Other fixes:
 - Fix missing GPS reference 60ee64749a97ec71b65c7f832f2f69ba967812da
-- https://github.com/mapillary/mapillary_tools/issues/433
-- https://github.com/mapillary/mapillary_tools/issues/437
-- https://github.com/mapillary/mapillary_tools/issues/338
+- https://github.com/banking/banking_tools/issues/433
+- https://github.com/banking/banking_tools/issues/437
+- https://github.com/banking/banking_tools/issues/338

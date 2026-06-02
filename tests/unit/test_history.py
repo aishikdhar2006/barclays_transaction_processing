@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from mapillary_tools import history, types
+from banking_tools import history, types
 
 
 class TestValidateHexdigits:

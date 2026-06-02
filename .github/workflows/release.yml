@@ -49,7 +49,7 @@ jobs:
             os: linux
             architecture: x64
           - platform: 2-core-ubuntu-arm # or ubuntu-latest-arm
-            # Check other options in https://github.com/mapillary/mapillary_tools/actions/runners
+            # Check other options in https://github.com/banking/banking_tools/actions/runners
             os: linux
             architecture: arm64 # Linux ARM
 
@@ -61,7 +61,7 @@ jobs:
 
     steps:
       # https://github.com/actions/checkout#Checkout-multiple-repos-side-by-side
-      # pull into mapillary/mapillary_tools/main
+      # pull into banking/banking_tools/main
       - uses: actions/checkout@v4
         with:
           path: main
@@ -80,7 +80,7 @@ jobs:
 
       - name: Validate version
         run: |
-          EXPECTED_GITHUB_REF=$(mapillary_tools --version | awk '{print "refs/tags/v" $3}')
+          EXPECTED_GITHUB_REF=$(banking_tools --version | awk '{print "refs/tags/v" $3}')
           if [[ "$EXPECTED_GITHUB_REF" != "$GITHUB_REF" ]]; then
             echo "Version mismatch: $EXPECTED_GITHUB_REF != $GITHUB_REF"
             exit 1
@@ -88,7 +88,7 @@ jobs:
         if: matrix.platform != 'windows-latest'
 
       # https://github.com/actions/checkout#Checkout-multiple-repos-side-by-side
-      # pull into mapillary/mapillary_tools/exiftool
+      # pull into banking/banking_tools/exiftool
       - name: Setup ExifTool
         uses: actions/checkout@v4
         with:
@@ -118,7 +118,7 @@ jobs:
           # Could run full integration tests with the binary (it might be slow)
           pytest tests/integration
         env:
-          MAPILLARY_TOOLS__TESTS_EXECUTABLE: ./dist/osx/mapillary_tools
+          MAPILLARY_TOOLS__TESTS_EXECUTABLE: ./dist/osx/banking_tools
           MAPILLARY_TOOLS__TESTS_EXIFTOOL_EXECUTABLE: perl ${{ github.workspace }}/exiftool/exiftool.pl
 
       - name: Build and test with Pyinstaller on Ubuntu
@@ -128,7 +128,7 @@ jobs:
           # Could run full integration tests with the binary (it might be slow)
           pytest tests/integration
         env:
-          MAPILLARY_TOOLS__TESTS_EXECUTABLE: ./dist/linux/mapillary_tools
+          MAPILLARY_TOOLS__TESTS_EXECUTABLE: ./dist/linux/banking_tools
           MAPILLARY_TOOLS__TESTS_EXIFTOOL_EXECUTABLE: perl ${{ github.workspace }}/exiftool/exiftool.pl
 
       - name: Build and test with Pyinstaller on Windows
@@ -137,10 +137,10 @@ jobs:
           ./script/build_bootloader.ps1
           ./script/build_win.ps1
           # Could run full integration tests with the binary (it might be slow)
-          cp ./dist/win/mapillary_tools.exe mapillary_tools_WINDOWS_VERY_HARD_TO_FIND_YOU_IN_ANOTHER_DIR_SO_I_MOVE_YOU_HERE.exe
+          cp ./dist/win/banking_tools.exe banking_tools_WINDOWS_VERY_HARD_TO_FIND_YOU_IN_ANOTHER_DIR_SO_I_MOVE_YOU_HERE.exe
           pytest tests/integration
         env:
-          MAPILLARY_TOOLS__TESTS_EXECUTABLE: mapillary_tools_WINDOWS_VERY_HARD_TO_FIND_YOU_IN_ANOTHER_DIR_SO_I_MOVE_YOU_HERE.exe
+          MAPILLARY_TOOLS__TESTS_EXECUTABLE: banking_tools_WINDOWS_VERY_HARD_TO_FIND_YOU_IN_ANOTHER_DIR_SO_I_MOVE_YOU_HERE.exe
           MAPILLARY_TOOLS__TESTS_EXIFTOOL_EXECUTABLE: perl ${{ github.workspace }}/exiftool/exiftool.pl
 
       - name: Release

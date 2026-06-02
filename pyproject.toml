@@ -10,16 +10,16 @@ requires = ["setuptools>=61.0", "wheel"]  # Tools needed to build the package
 build-backend = "setuptools.build_meta"   # Use setuptools backend that reads pyproject.toml
 
 [project]
-name = "mapillary_tools"
+name = "banking_tools"
 dynamic = ["version"]
-description = "Mapillary Image/Video Import Pipeline"
+description = "Banking Transaction Processing Platform"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "BSD"}
 authors = [
-    {name = "Mapillary", email = "support@mapillary.com"},
+    {name = "BankingPlatform", email = "support@banking.com"},
 ]
-keywords = ["mapillary", "gis", "computer vision", "street view"]
+keywords = ["banking", "transactions", "payments", "settlement", "compliance"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -47,18 +47,18 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mapillary/mapillary_tools"
-Repository = "https://github.com/mapillary/mapillary_tools"
-Issues = "https://github.com/mapillary/mapillary_tools/issues"
+Homepage = "https://github.com/aishikdhar2006/banking_tools"
+Repository = "https://github.com/aishikdhar2006/banking_tools"
+Issues = "https://github.com/aishikdhar2006/banking_tools/issues"
 
 [project.scripts]
-mapillary_tools = "mapillary_tools.commands.__main__:main"
+banking_tools = "banking_tools.commands.__main__:main"
 
 [tool.setuptools.dynamic]
-version = {attr = "mapillary_tools.VERSION"}
+version = {attr = "banking_tools.VERSION"}
 
 [tool.setuptools.packages.find]
-include = ["mapillary_tools*"]
+include = ["banking_tools*"]
 
 [dependency-groups]
 dev = [

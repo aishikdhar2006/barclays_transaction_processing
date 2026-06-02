@@ -5,7 +5,7 @@ This source code is licensed under the BSD license found in the
 LICENSE file in the root directory of this source tree.
 -->
 
-# Contributing to mapillary_tools
+# Contributing to banking_tools
 We want to make contributing to this project as easy and transparent as
 possible.
 
@@ -34,5 +34,5 @@ disclosure of security bugs. In those cases, please go through the process
 outlined on that page and do not file a public issue.
 
 ## License
-By contributing to mapillary_tools, you agree that your contributions will be licensed
+By contributing to banking_tools, you agree that your contributions will be licensed
 under the LICENSE file in the root directory of this source tree.

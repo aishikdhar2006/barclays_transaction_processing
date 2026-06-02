@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-from mapillary_tools import api_v4
+from banking_tools import api_v4
 
 
 class TestCreateSessions:

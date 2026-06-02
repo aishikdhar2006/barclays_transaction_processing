@@ -8,7 +8,7 @@ import sqlite3
 import tempfile
 
 import pytest
-from mapillary_tools.store import KeyValueStore
+from banking_tools.store import KeyValueStore
 
 
 def test_basic_dict_operations(tmpdir):

@@ -35,7 +35,7 @@ jobs:
 
     steps:
       # https://github.com/actions/checkout#Checkout-multiple-repos-side-by-side
-      # pull into mapillary/mapillary_tools/main
+      # pull into banking/banking_tools/main
       - uses: actions/checkout@v4
         with:
           path: main
@@ -53,24 +53,24 @@ jobs:
 
       - name: Lint with ruff
         run: |
-          ruff check mapillary_tools
+          ruff check banking_tools
 
       - name: Format with ruff
         run: |
-          ruff format --check mapillary_tools tests
+          ruff format --check banking_tools tests
 
       - name: Sort imports with usort
         run: |
-          usort diff mapillary_tools
+          usort diff banking_tools
 
       - name: Type check with mypy
         run: |
-          mypy mapillary_tools tests/cli
+          mypy banking_tools tests/cli
 
       # Begin of expensive steps: run after the quick checks done above
 
       # https://github.com/actions/checkout#Checkout-multiple-repos-side-by-side
-      # pull into mapillary/mapillary_tools/exiftool
+      # pull into banking/banking_tools/exiftool
       - name: Setup ExifTool
         uses: actions/checkout@v4
         with:
@@ -96,8 +96,8 @@ jobs:
 
       - name: Test with pytest
         run: |
-          mapillary_tools --version
+          banking_tools --version
           pytest -s -vv tests
         env:
-          MAPILLARY_TOOLS__TESTS_EXECUTABLE: mapillary_tools
+          MAPILLARY_TOOLS__TESTS_EXECUTABLE: banking_tools
           MAPILLARY_TOOLS__TESTS_EXIFTOOL_EXECUTABLE: perl ${{ github.workspace }}/exiftool/exiftool.pl

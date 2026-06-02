@@ -6,7 +6,7 @@
 import io
 import random
 
-from mapillary_tools.mp4.io_utils import ChainedIO, SlicedIO
+from banking_tools.formats.io_utils import ChainedIO, SlicedIO
 
 
 def test_chained():

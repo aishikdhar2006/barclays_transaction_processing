@@ -6,8 +6,8 @@
 import datetime
 from pathlib import Path
 
-from mapillary_tools import geo, types
-from mapillary_tools.serializer import description
+from banking_tools import currency, types
+from banking_tools.serializer import description
 
 
 def test_desc():
@@ -55,7 +55,9 @@ def test_desc_video():
             filename=Path("foo/bar.mp4").resolve(),
             md5sum="123",
             filetype=types.FileType.CAMM,
-            points=[geo.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)],
+            points=[
+                currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)
+            ],
             make="hello",
             model="world",
         ),
@@ -63,7 +65,9 @@ def test_desc_video():
             filename=Path("foo/bar.mp4").resolve(),
             md5sum=None,
             filetype=types.FileType.CAMM,
-            points=[geo.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)],
+            points=[
+                currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)
+            ],
         ),
         types.VideoMetadata(
             filename=Path("foo/bar.mp4").resolve(),
@@ -75,7 +79,7 @@ def test_desc_video():
             filename=Path("foo/bar.mp4").resolve(),
             md5sum="789",
             filetype=types.FileType.GOPRO,
-            points=[geo.Point(time=456, lat=2.0, lon=3.0, alt=100.0, angle=45)],
+            points=[currency.Point(time=456, lat=2.0, lon=3.0, alt=100.0, angle=45)],
             make="GoPro",
             model="HERO10",
             camera_uuid="ABC123_XYZ789",
@@ -101,30 +105,30 @@ def test_datetimes():
     assert "2019_12_31_16_00_12_123" == description.build_capture_time(x)
     assert (
         abs(
-            geo.as_unix_time(
+            currency.as_unix_time(
                 description.parse_capture_time(description.build_capture_time(x))
             )
-            - geo.as_unix_time(x)
+            - currency.as_unix_time(x)
         )
         < 0.001
     )
     x = datetime.datetime.now()
     assert (
         abs(
-            geo.as_unix_time(
+            currency.as_unix_time(
                 description.parse_capture_time(description.build_capture_time(x))
             )
-            - geo.as_unix_time(x)
+            - currency.as_unix_time(x)
         )
         < 0.001
     )
     x = x.astimezone()
     assert (
         abs(
-            geo.as_unix_time(
+            currency.as_unix_time(
                 description.parse_capture_time(description.build_capture_time(x))
             )
-            - geo.as_unix_time(x)
+            - currency.as_unix_time(x)
         )
         < 0.001
     )
