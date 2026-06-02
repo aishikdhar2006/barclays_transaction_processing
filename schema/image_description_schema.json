@@ -66,7 +66,7 @@
                         "string",
                         "null"
                     ],
-                    "description": "MD5 checksum of the video content. If not provided, the uploader will compute it"
+                    "description": "MD5 checksum of the video content. If not provided, the processor will compute it"
                 },
                 "filesize": {
                     "type": [
@@ -167,7 +167,7 @@
                         "string",
                         "null"
                     ],
-                    "description": "MD5 checksum of the image content. If not provided, the uploader will compute it"
+                    "description": "MD5 checksum of the image content. If not provided, the processor will compute it"
                 },
                 "filesize": {
                     "type": [
