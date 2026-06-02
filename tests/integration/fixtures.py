@@ -445,7 +445,7 @@ def run_process_and_settle_for_descs(
 
 def run_upload(params: list[str], **kwargs):
     return run_command(
-        ["--dry_run", *["--user_name", USERNAME], *params], command="upload", **kwargs
+        ["--dry_run", *["--user_name", USERNAME], *params], command="settle", **kwargs
     )
 
 

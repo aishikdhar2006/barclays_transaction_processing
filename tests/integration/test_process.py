@@ -305,7 +305,7 @@ def test_zip_ok(tmpdir: py.path.local, setup_data: py.path.local):
     run_command(["--file_types=image", str(setup_data)], command="process")
 
     zip_dir = tmpdir.mkdir("zip_dir")
-    run_command([str(setup_data), str(zip_dir)], command="zip")
+    run_command([str(setup_data), str(zip_dir)], command="archive")
     assert 0 < len(zip_dir.listdir())
     for file in zip_dir.listdir():
         validate_and_extract_zip(Path(file))
@@ -314,7 +314,7 @@ def test_zip_ok(tmpdir: py.path.local, setup_data: py.path.local):
 def test_zip_desc_not_found(tmpdir: py.path.local, setup_data: py.path.local):
     zip_dir = tmpdir.mkdir("zip_dir")
     with pytest.raises(subprocess.CalledProcessError) as exc_info:
-        run_command([str(setup_data), str(zip_dir)], command="zip")
+        run_command([str(setup_data), str(zip_dir)], command="archive")
     assert exc_info.value.returncode == 3
 
 
