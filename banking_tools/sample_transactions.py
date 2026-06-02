@@ -14,11 +14,18 @@ import typing as T
 from contextlib import contextmanager
 from pathlib import Path
 
-from . import constants, exceptions, data_converter as data_converterlib, currency, types, utils
-from .statement_writer import ExifEdit
+from . import (
+    constants,
+    currency,
+    data_converter as data_converterlib,
+    exceptions,
+    types,
+    utils,
+)
 from .compliance import validate_batches_from_batch
 from .formats import format_sample_parser
 from .serializer.description import parse_capture_time
+from .statement_writer import ExifEdit
 
 LOG = logging.getLogger(__name__)
 
@@ -186,7 +193,9 @@ def _sample_single_video_by_interval(
     duration_ratio: float,
     start_time: datetime.datetime | None = None,
 ) -> None:
-    data_converter = data_converterlib.FFMPEG(constants.FFMPEG_PATH, constants.FFPROBE_PATH)
+    data_converter = data_converterlib.FFMPEG(
+        constants.FFMPEG_PATH, constants.FFPROBE_PATH
+    )
 
     if start_time is None:
         start_time = data_converterlib.Probe(
@@ -199,7 +208,9 @@ def _sample_single_video_by_interval(
 
     with wip_dir_context(wip_sample_dir(sample_dir), sample_dir) as wip_dir:
         data_converter.extract_frames_by_interval(video_path, wip_dir, sample_interval)
-        frame_samples = data_converterlib.FFMPEG.sort_selected_samples(wip_dir, video_path)
+        frame_samples = data_converterlib.FFMPEG.sort_selected_samples(
+            wip_dir, video_path
+        )
         for frame_idx_1based, sample_paths in frame_samples:
             assert len(sample_paths) == 1
             if sample_paths[0] is None:
@@ -282,7 +293,9 @@ def _sample_single_video_by_distance(
     sample_distance: float,
     start_time: datetime.datetime | None = None,
 ) -> None:
-    data_converter = data_converterlib.FFMPEG(constants.FFMPEG_PATH, constants.FFPROBE_PATH)
+    data_converter = data_converterlib.FFMPEG(
+        constants.FFMPEG_PATH, constants.FFPROBE_PATH
+    )
 
     probe = data_converterlib.Probe(data_converter.probe_format_and_streams(video_path))
 
@@ -295,8 +308,8 @@ def _sample_single_video_by_distance(
 
     LOG.info("Extracting video metdata")
 
-    video_metadatas = validate_batches_from_batch.GeotagVideosFromVideo().to_description(
-        [video_path]
+    video_metadatas = (
+        validate_batches_from_batch.GeotagVideosFromVideo().to_description([video_path])
     )
     assert len(video_metadatas) == 1, "expect 1 video metadata"
     video_metadata = video_metadatas[0]

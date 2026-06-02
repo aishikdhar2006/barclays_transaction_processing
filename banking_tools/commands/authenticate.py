@@ -15,7 +15,10 @@ class Command:
 
     def add_basic_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument(
-            "--user_name", help="BankingPlatform user profile", default=None, required=False
+            "--user_name",
+            help="BankingPlatform user profile",
+            default=None,
+            required=False,
         )
         parser.add_argument(
             "--user_email",
@@ -30,7 +33,10 @@ class Command:
             required=False,
         )
         parser.add_argument(
-            "--jwt", help="BankingPlatform user access token", default=None, required=False
+            "--jwt",
+            help="BankingPlatform user access token",
+            default=None,
+            required=False,
         )
         parser.add_argument(
             "--delete",

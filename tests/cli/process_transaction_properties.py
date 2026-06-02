@@ -11,7 +11,9 @@ from banking_tools import process_transaction_properties
 
 def main():
     descs = json.load(sys.stdin)
-    processed_descs = process_transaction_properties.process_transaction_properties(descs)
+    processed_descs = process_transaction_properties.process_transaction_properties(
+        descs
+    )
     print(json.dumps(processed_descs))
 
 

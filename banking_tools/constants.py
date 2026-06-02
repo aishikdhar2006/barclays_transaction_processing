@@ -80,7 +80,9 @@ _parse_filesize = functools.partial(
 ###################
 ##### GENERAL #####
 ###################
-USER_DATA_DIR = appdirs.user_data_dir(appname="banking_tools", appauthor="BankingPlatform")
+USER_DATA_DIR = appdirs.user_data_dir(
+    appname="banking_tools", appauthor="BankingPlatform"
+)
 PROMPT_DISABLED: bool = _yes_or_no(os.getenv(_ENV_PREFIX + "PROMPT_DISABLED", "NO"))
 
 

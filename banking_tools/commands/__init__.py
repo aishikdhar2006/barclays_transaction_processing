@@ -7,10 +7,10 @@
 from . import (
     archive,
     authenticate,
+    batch_process,
+    batch_process_and_settle,
     process,
     process_and_settle,
     sample_transactions,
     settle,
-    batch_process,
-    batch_process_and_settle,
 )

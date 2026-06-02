@@ -55,7 +55,9 @@ class MOCK_FFMPEG(data_converterlib.FFMPEG):
             sample = f"{frame_path_prefix}_{stream_specifier}_{idx + 1:06d}.jpg"
             shutil.copyfile(src, sample)
 
-    def probe_format_and_streams(self, video_path: Path) -> data_converterlib.ProbeOutput:
+    def probe_format_and_streams(
+        self, video_path: Path
+    ) -> data_converterlib.ProbeOutput:
         with open(video_path) as fp:
             return json.load(fp)
 
@@ -213,36 +215,59 @@ class TestWithinTrackTimeRangeBuffered:
 
     def test_within_range(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, 2.0) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 2.0) is True
+        )
 
     def test_at_start_boundary(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, 0.0) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 0.0) is True
+        )
 
     def test_at_end_boundary(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, 4.0) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 4.0) is True
+        )
 
     def test_within_1ms_buffer_before_start(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, -0.0005) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, -0.0005)
+            is True
+        )
 
     def test_within_1ms_buffer_after_end(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, 4.0005) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 4.0005)
+            is True
+        )
 
     def test_outside_buffer_before_start(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, -0.002) is False
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, -0.002)
+            is False
+        )
 
     def test_outside_buffer_after_end(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, 4.002) is False
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 4.002)
+            is False
+        )
 
     def test_exactly_at_1ms_boundary(self) -> None:
         points = _make_gps_points(5, time_step=1.0)
-        assert sample_transactions._within_track_time_range_buffered(points, -0.001) is True
-        assert sample_transactions._within_track_time_range_buffered(points, 4.001) is True
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, -0.001)
+            is True
+        )
+        assert (
+            sample_transactions._within_track_time_range_buffered(points, 4.001) is True
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -303,7 +328,9 @@ class TestSampleVideoStreamByDistance:
         """Frames outside the GPS track time range should not be selected."""
         # GPS track covers t=2..6
         points = [
-            currency.Point(time=p.time + 2.0, lat=p.lat, lon=p.lon, alt=p.alt, angle=p.angle)
+            currency.Point(
+                time=p.time + 2.0, lat=p.lat, lon=p.lon, alt=p.alt, angle=p.angle
+            )
             for p in _make_gps_points(5, time_step=1.0)
         ]
 
@@ -456,13 +483,21 @@ class TestSampleVideoDistanceIntegration:
             )
 
         mock_data_converter_instance = mock.MagicMock(spec=data_converterlib.FFMPEG)
-        mock_data_converter_instance.probe_format_and_streams.return_value = probe_output
-        mock_data_converter_instance.extract_specified_frames.side_effect = fake_extract_frames
+        mock_data_converter_instance.probe_format_and_streams.return_value = (
+            probe_output
+        )
+        mock_data_converter_instance.extract_specified_frames.side_effect = (
+            fake_extract_frames
+        )
 
         mock_data_converter_class = mock.MagicMock()
         mock_data_converter_class.return_value = mock_data_converter_instance
-        mock_data_converter_class.sort_selected_samples = data_converterlib.FFMPEG.sort_selected_samples
-        mock_data_converter_class.iterate_samples = data_converterlib.FFMPEG.iterate_samples
+        mock_data_converter_class.sort_selected_samples = (
+            data_converterlib.FFMPEG.sort_selected_samples
+        )
+        mock_data_converter_class.iterate_samples = (
+            data_converterlib.FFMPEG.iterate_samples
+        )
         mock_data_converter_class._extract_stream_frame_idx = (
             data_converterlib.FFMPEG._extract_stream_frame_idx
         )

@@ -494,7 +494,9 @@ class TestVideoExtractCameraUuid:
 
     def test_exif_body_serial(self):
         """Test extraction of standard EXIF body serial number"""
-        reader = self._create_video_statement_readerer({"ExifIFD:BodySerialNumber": "BODY123"})
+        reader = self._create_video_statement_readerer(
+            {"ExifIFD:BodySerialNumber": "BODY123"}
+        )
         assert reader.extract_camera_uuid() == "BODY123"
 
     def test_exif_body_and_lens_serial(self):

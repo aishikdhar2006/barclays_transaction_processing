@@ -10,7 +10,10 @@ from pathlib import Path
 
 from banking_tools import currency, telemetry, types, processor
 from banking_tools.ledger import ledger_builder, ledger_parser
-from banking_tools.formats import construct_format_parser as cparser, simple_format_builder
+from banking_tools.formats import (
+    construct_format_parser as cparser,
+    simple_format_builder,
+)
 
 
 def test_filter_points_by_edit_list():
@@ -39,7 +42,9 @@ def test_filter_points_by_edit_list():
         currency.Point(time=0.29 + 4.4, lat=0, lon=0, alt=None, angle=None),
         currency.Point(time=0.31 + 4.4, lat=0, lon=0, alt=None, angle=None),
     ] == list(
-        ledger_parser._filter_telemetry_by_elst_segments(points, [(-1, 4.4), (0.24, 0.3)])
+        ledger_parser._filter_telemetry_by_elst_segments(
+            points, [(-1, 4.4), (0.24, 0.3)]
+        )
     )
 
 
@@ -298,7 +303,11 @@ def test_build_and_parse2():
     assert x.make == "test_make汉字"
     assert x.model == "test_model汉字"
     approximate(
-        [currency.Point(time=0.09999999988358468, lat=0.01, lon=0.2, alt=-1.0, angle=None)],
+        [
+            currency.Point(
+                time=0.09999999988358468, lat=0.01, lon=0.2, alt=-1.0, angle=None
+            )
+        ],
         x.points,
     )
 
@@ -315,7 +324,9 @@ def test_build_and_parse9():
         model="test_model汉字",
     )
     x = encode_decode_empty_camm_mp4(metadata)
-    assert [currency.Point(time=0.0, lat=0.01, lon=0.2, alt=-1.0, angle=None)] == x.points
+    assert [
+        currency.Point(time=0.0, lat=0.01, lon=0.2, alt=-1.0, angle=None)
+    ] == x.points
 
 
 def test_build_and_parse10():

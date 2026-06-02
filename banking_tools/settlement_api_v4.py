@@ -192,9 +192,7 @@ class FakeUploadService(UploadService):
     ):
         super().__init__(*args, **kwargs)
         if upload_path is None:
-            upload_path = Path(tempfile.gettempdir()).joinpath(
-                "banking_public_uploads"
-            )
+            upload_path = Path(tempfile.gettempdir()).joinpath("banking_public_uploads")
         self._upload_path = upload_path
         self._transient_error_ratio = transient_error_ratio
 

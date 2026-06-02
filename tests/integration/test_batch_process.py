@@ -32,7 +32,9 @@ def test_sample_transactions_relpath():
     pytest_skip_if_not_data_converter_installed()
 
     with tempfile.TemporaryDirectory() as dir:
-        run_sample_transactions(["--rerun", "tests/data/gopro_data/hero8.mp4", str(dir)])
+        run_sample_transactions(
+            ["--rerun", "tests/data/gopro_data/hero8.mp4", str(dir)]
+        )
 
     with tempfile.TemporaryDirectory() as dir:
         run_sample_transactions(

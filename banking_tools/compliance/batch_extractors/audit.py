@@ -17,7 +17,7 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-from ... import exceptions, currency, telemetry, types, utils
+from ... import currency, exceptions, telemetry, types, utils
 from ..utils import parse_gpx
 from .base import BaseVideoExtractor
 from .native import NativeVideoExtractor
@@ -78,7 +78,9 @@ class GPXVideoExtractor(BaseVideoExtractor):
         return dataclasses.replace(native_video_metadata, points=gpx_points)
 
     @classmethod
-    def _rebase_times(cls, points: T.Sequence[currency.Point], offset: float = 0.0) -> None:
+    def _rebase_times(
+        cls, points: T.Sequence[currency.Point], offset: float = 0.0
+    ) -> None:
         """
         Rebase point times to start from **offset**
         """
@@ -89,7 +91,9 @@ class GPXVideoExtractor(BaseVideoExtractor):
 
     @classmethod
     def _gpx_offset(
-        cls, gpx_points: T.Sequence[currency.Point], video_gps_points: T.Sequence[currency.Point]
+        cls,
+        gpx_points: T.Sequence[currency.Point],
+        video_gps_points: T.Sequence[currency.Point],
     ) -> float:
         """
         Calculate the offset that needs to be applied to the GPX points to sync with the video GPS points.

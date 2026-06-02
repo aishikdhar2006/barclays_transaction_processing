@@ -55,7 +55,9 @@ def test_desc_video():
             filename=Path("foo/bar.mp4").resolve(),
             md5sum="123",
             filetype=types.FileType.CAMM,
-            points=[currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)],
+            points=[
+                currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)
+            ],
             make="hello",
             model="world",
         ),
@@ -63,7 +65,9 @@ def test_desc_video():
             filename=Path("foo/bar.mp4").resolve(),
             md5sum=None,
             filetype=types.FileType.CAMM,
-            points=[currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)],
+            points=[
+                currency.Point(time=123, lat=1.331, lon=2.33, alt=3.123, angle=123)
+            ],
         ),
         types.VideoMetadata(
             filename=Path("foo/bar.mp4").resolve(),

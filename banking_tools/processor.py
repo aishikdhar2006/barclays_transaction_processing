@@ -37,18 +37,18 @@ from . import (
     api_v4,
     config,
     constants,
-    statement_writer,
     currency,
     history,
+    settlement_api_v4,
+    statement_writer,
     telemetry,
     types,
-    settlement_api_v4,
     utils,
     VERSION,
 )
+from .formats import simple_format_builder
 from .ledger import ledger_builder, ledger_parser
 from .risk import risk_parser
-from .formats import simple_format_builder
 from .serializer.description import (
     desc_file_to_exif,
     DescriptionJSONSerializer,
@@ -790,7 +790,9 @@ class CachedImageUploader:
 
         processor = Uploader(self.upload_options, user_session=user_session)
 
-        session_key = processor._gen_session_key(io.BytesIO(image_bytes), image_progress)
+        session_key = processor._gen_session_key(
+            io.BytesIO(image_bytes), image_progress
+        )
 
         file_handle = self._get_cached_file_handle(session_key)
 

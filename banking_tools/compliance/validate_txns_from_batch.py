@@ -17,8 +17,8 @@ else:
 
 from .. import types, utils
 from .base import GeotagImagesFromGeneric
-from .validate_txns_from_audit import GeotagImagesFromGPX
 from .validate_batches_from_batch import GeotagVideosFromVideo
+from .validate_txns_from_audit import GeotagImagesFromGPX
 
 
 LOG = logging.getLogger(__name__)

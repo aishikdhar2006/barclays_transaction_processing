@@ -15,7 +15,7 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-from ... import exceptions, batch_report_reader, currency, telemetry, types, utils
+from ... import batch_report_reader, currency, exceptions, telemetry, types, utils
 from ...risk import risk_score_filter
 from .base import BaseVideoExtractor
 

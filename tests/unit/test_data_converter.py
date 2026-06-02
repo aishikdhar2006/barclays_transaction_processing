@@ -11,7 +11,10 @@ import py.path
 import pytest
 from banking_tools import data_converter
 
-from ..integration.fixtures import pytest_skip_if_not_data_converter_installed, setup_data
+from ..integration.fixtures import (
+    pytest_skip_if_not_data_converter_installed,
+    setup_data,
+)
 
 
 def test_data_converter_run_ok():

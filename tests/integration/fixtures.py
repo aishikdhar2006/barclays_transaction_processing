@@ -244,7 +244,9 @@ def load_descs(descs) -> list:
 
 def extract_all_uploaded_descs(upload_folder: Path) -> list[list[dict]]:
     session_by_file_handle: dict[str, str] = {}
-    if upload_folder.joinpath(settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR).exists():
+    if upload_folder.joinpath(
+        settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR
+    ).exists():
         for session_path in upload_folder.joinpath(
             settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR
         ).iterdir():

@@ -384,7 +384,9 @@ class TestImageSequenceUploader:
                 dry_run=True,
             )
             emitter = processor.EventEmitter()
-            sequence_processor = processor.ImageSequenceUploader(upload_options, emitter)
+            sequence_processor = processor.ImageSequenceUploader(
+                upload_options, emitter
+            )
 
             # Verify cache is disabled for both instances
             assert sequence_processor.cached_image_processor.cache is None, (

@@ -525,7 +525,8 @@ def test_process_finalize(setup_data):
         # toobig,
     ]
     pytest.raises(
-        exceptions.BankingPlatformProcessError, lambda: pgp.process_finalize([], sequence)
+        exceptions.BankingPlatformProcessError,
+        lambda: pgp.process_finalize([], sequence),
     )
     # pgp.process_finalize([], sequence, skip_process_errors=True)
     actual = pgp.process_finalize(

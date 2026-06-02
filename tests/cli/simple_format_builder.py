@@ -21,8 +21,10 @@ def _parse_args():
 
 def main():
     parsed_args = _parse_args()
-    video_metadatas = validate_batches_from_batch.GeotagVideosFromVideo().to_description(
-        [Path(parsed_args.source_mp4_path)]
+    video_metadatas = (
+        validate_batches_from_batch.GeotagVideosFromVideo().to_description(
+            [Path(parsed_args.source_mp4_path)]
+        )
     )
     generator = ledger_builder.ledger_sample_generator2(
         VideoUploader.prepare_camm_info(video_metadatas[0])

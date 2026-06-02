@@ -16,7 +16,7 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-from .. import exceptions, currency, types
+from .. import currency, exceptions, types
 from ..serializer.description import build_capture_time
 from .base import GeotagImagesFromGeneric
 from .validate_txns_from_statement import ImageEXIFExtractor

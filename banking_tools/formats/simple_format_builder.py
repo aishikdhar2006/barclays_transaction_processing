@@ -11,8 +11,8 @@ import typing as T
 
 from . import (
     construct_format_parser as cparser,
-    io_utils,
     format_sample_parser as sample_parser,
+    io_utils,
     simple_format_parser as sparser,
 )
 from .construct_format_parser import BoxDict

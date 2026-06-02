@@ -13,8 +13,8 @@ from pathlib import Path
 from tqdm import tqdm
 
 from .. import exceptions, types, utils
-from .txn_extractors.base import BaseImageExtractor
 from .batch_extractors.base import BaseVideoExtractor
+from .txn_extractors.base import BaseImageExtractor
 
 
 LOG = logging.getLogger(__name__)

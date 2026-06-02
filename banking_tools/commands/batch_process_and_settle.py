@@ -6,8 +6,8 @@
 import inspect
 
 from ..authenticate import fetch_user_items
-from .settle import Command as UploadCommand
 from .batch_process import Command as VideoProcessCommand
+from .settle import Command as UploadCommand
 
 
 class Command:

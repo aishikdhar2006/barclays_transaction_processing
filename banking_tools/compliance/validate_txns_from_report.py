@@ -20,9 +20,9 @@ from .. import constants, exceptions, report_reader, types, utils
 from ..report_runner import ExiftoolRunner
 from . import options
 from .base import GeotagImagesFromGeneric
-from .validate_txns_from_batch import GeotagImagesFromVideo
-from .validate_batches_from_report import GeotagVideosFromExifToolXML
 from .txn_extractors.report import ImageExifToolExtractor
+from .validate_batches_from_report import GeotagVideosFromExifToolXML
+from .validate_txns_from_batch import GeotagImagesFromVideo
 
 LOG = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ class GeotagImagesFromExifToolWithSamples(GeotagImagesFromGeneric):
         self.source_path = source_path
         self.offset_time = offset_time
 
-    def geotag_samples(
+    def compliance_samples(
         self, image_paths: T.Sequence[Path]
     ) -> list[types.ImageMetadataOrError]:
         # Find all video paths in self.xml_path

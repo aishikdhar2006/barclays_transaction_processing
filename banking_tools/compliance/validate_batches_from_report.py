@@ -20,8 +20,8 @@ from .. import constants, exceptions, report_reader, types
 from ..report_runner import ExiftoolRunner
 from . import options
 from .base import GeotagVideosFromGeneric
-from .utils import index_rdf_description_by_path
 from .batch_extractors.report import VideoExifToolExtractor
+from .utils import index_rdf_description_by_path
 
 LOG = logging.getLogger(__name__)
 

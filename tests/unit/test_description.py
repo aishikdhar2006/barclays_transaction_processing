@@ -184,7 +184,9 @@ def test_decode_camm_gps_point():
 
 
 def test_encode_decode_roundtrip_base_point():
-    original = currency.Point(time=3.456, lat=40.7128, lon=-74.006, alt=5.5, angle=270.0)
+    original = currency.Point(
+        time=3.456, lat=40.7128, lon=-74.006, alt=5.5, angle=270.0
+    )
     encoded = PointEncoder.encode(original)
     decoded = PointEncoder.decode(encoded)
     assert type(decoded) is currency.Point

@@ -18,7 +18,9 @@ def test_all():
     ]
 
     all_desc_excs = [
-        exc for exc in all_excs if issubclass(exc, exceptions.BankingPlatformDescriptionError)
+        exc
+        for exc in all_excs
+        if issubclass(exc, exceptions.BankingPlatformDescriptionError)
     ]
 
     for exc in all_desc_excs:

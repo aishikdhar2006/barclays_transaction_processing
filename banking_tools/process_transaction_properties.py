@@ -14,7 +14,7 @@ import typing as T
 
 import humanize
 
-from . import constants, exceptions, currency, types, utils
+from . import constants, currency, exceptions, types, utils
 from .serializer.description import DescriptionJSONSerializer
 
 LOG = logging.getLogger(__name__)
@@ -531,7 +531,9 @@ def _check_sequences_zigzag(
             # Create errors only for deviation points
             for idx in sorted(deviation_indices):
                 image = sequence[idx]
-                ex = exceptions.BankingPlatformZigZagError("GPS zig-zag deviation detected")
+                ex = exceptions.BankingPlatformZigZagError(
+                    "GPS zig-zag deviation detected"
+                )
                 LOG.error(f"{image.filename.name}: {ex}")
                 output_errors.append(
                     types.describe_error_metadata(

@@ -12,8 +12,8 @@ from pathlib import Path
 from .. import constants, types
 from ..process_compliance_properties import (
     DEFAULT_GEOTAG_SOURCE_OPTIONS,
-    process_finalize,
     process_compliance_properties,
+    process_finalize,
     SourceType,
 )
 from ..process_transaction_properties import process_transaction_properties

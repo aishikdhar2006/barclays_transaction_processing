@@ -280,7 +280,9 @@ def _prompt_login(
 
     if user_password is None:
         if not _enabled:
-            raise exceptions.BankingPlatformBadParameterError("user_password is required")
+            raise exceptions.BankingPlatformBadParameterError(
+                "user_password is required"
+            )
         while True:
             user_password = getpass.getpass("Enter BankingPlatform user password: ")
             if user_password:

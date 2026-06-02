@@ -15,14 +15,14 @@ from .. import api_v4, constants, exceptions, VERSION
 from ..settlement import log_exception
 from ..utils import configure_logger, get_app_name
 from . import (
+    archive,
     authenticate,
+    batch_process,
+    batch_process_and_settle,
     process,
     process_and_settle,
     sample_transactions,
     settle,
-    batch_process,
-    batch_process_and_settle,
-    archive,
 )
 
 banking_tools_commands = [

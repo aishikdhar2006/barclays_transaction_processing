@@ -14,10 +14,10 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-from ... import swift_parser, exceptions, currency, telemetry, types, utils
-from ...ledger import ledger_parser
-from ...risk import risk_score_filter, risk_parser
+from ... import currency, exceptions, swift_parser, telemetry, types, utils
 from ...formats import construct_format_parser, simple_format_parser
+from ...ledger import ledger_parser
+from ...risk import risk_parser, risk_score_filter
 from .base import BaseVideoExtractor
 
 
@@ -38,7 +38,8 @@ class GoProVideoExtractor(BaseVideoExtractor):
             raise exceptions.BankingPlatformGPXEmptyError("Empty GPS data found")
 
         gps_points = T.cast(
-            T.List[telemetry.GPSPoint], risk_score_filter.remove_noisy_points(gps_points)
+            T.List[telemetry.GPSPoint],
+            risk_score_filter.remove_noisy_points(gps_points),
         )
         if not gps_points:
             raise exceptions.BankingPlatformGPSNoiseError("GPS is too noisy")

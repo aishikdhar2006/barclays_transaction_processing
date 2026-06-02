@@ -12,7 +12,7 @@ from pathlib import Path
 
 import gpxpy
 
-from .. import report_reader, currency, telemetry, utils
+from .. import currency, report_reader, telemetry, utils
 
 Track = T.List[currency.Point]
 LOG = logging.getLogger(__name__)

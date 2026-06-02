@@ -56,7 +56,11 @@ def get_lat_lon_time_from_nmea(nmea_file: Path) -> list[currency.Point]:
             lat, lon, alt = data.latitude, data.longitude, data.altitude
             points.append(
                 currency.Point(
-                    time=currency.as_unix_time(dt), lat=lat, lon=lon, alt=alt, angle=None
+                    time=currency.as_unix_time(dt),
+                    lat=lat,
+                    lon=lon,
+                    alt=alt,
+                    angle=None,
                 )
             )
 

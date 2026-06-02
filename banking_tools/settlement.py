@@ -26,8 +26,8 @@ from . import (
     history,
     http,
     ipc,
-    types,
     processor,
+    types,
     utils,
     VERSION,
 )

@@ -187,7 +187,9 @@ class ExifToolRead(statement_reader.ExifReadABC):
         if subsec:
             subsec = subsec.replace(" ", "0")
         offset = self._extract_alternative_fields(offset_tags, str)
-        dt = statement_reader.parse_datetimestr_with_subsec_and_offset(dtstr, subsec, offset)
+        dt = statement_reader.parse_datetimestr_with_subsec_and_offset(
+            dtstr, subsec, offset
+        )
         if dt is None:
             return None
         return dt

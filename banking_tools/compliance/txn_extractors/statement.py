@@ -15,7 +15,7 @@ if sys.version_info >= (3, 12):
 else:
     from typing_extensions import override
 
-from ... import exceptions, statement_reader, currency, types, utils
+from ... import currency, exceptions, statement_reader, types, utils
 from .base import BaseImageExtractor
 
 

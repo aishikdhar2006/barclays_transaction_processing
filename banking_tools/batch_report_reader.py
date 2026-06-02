@@ -11,7 +11,7 @@ import logging
 import typing as T
 import xml.etree.ElementTree as ET
 
-from . import statement_reader, report_reader, currency
+from . import currency, report_reader, statement_reader
 from .telemetry import GPSFix, GPSPoint
 from .utils import sanitize_serial
 
@@ -187,7 +187,9 @@ def _aggregate_timestamps(
             for text in _extract_alternative_fields(texts_by_tag, [time_tag], list)
             or []
         ]
-        timestamps = [currency.as_unix_time(dt) if dt is not None else None for dt in dts]
+        timestamps = [
+            currency.as_unix_time(dt) if dt is not None else None for dt in dts
+        ]
         if expected_length != len(timestamps):
             LOG.warning(
                 "Found different number of timestamps %d and coordinates %d",

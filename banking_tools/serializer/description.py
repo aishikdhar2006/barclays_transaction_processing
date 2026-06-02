@@ -25,7 +25,7 @@ else:
 
 import jsonschema
 
-from .. import exceptions, currency, telemetry
+from .. import currency, exceptions, telemetry
 from ..types import (
     BaseSerializer,
     describe_error_metadata,
@@ -548,7 +548,9 @@ class PointEncoder:
                 speed_accuracy=0.0,
             )
         time_ms, lon, lat, alt, angle = entry[0], entry[1], entry[2], entry[3], entry[4]
-        return currency.Point(time=time_ms / 1000, lon=lon, lat=lat, alt=alt, angle=angle)
+        return currency.Point(
+            time=time_ms / 1000, lon=lon, lat=lat, alt=alt, angle=angle
+        )
 
 
 def build_capture_time(time: datetime.datetime | int | float) -> str:
