@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 
-from mapillary_tools import ipc
+from banking_tools import ipc
 
 
 class TestIPCWrite:

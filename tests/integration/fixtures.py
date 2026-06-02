@@ -19,10 +19,10 @@ import exifread
 import jsonschema
 import py.path
 import pytest
-from mapillary_tools import upload_api_v4, utils
+from banking_tools import settlement_api_v4, utils
 
 EXECUTABLE = os.getenv(
-    "MAPILLARY_TOOLS__TESTS_EXECUTABLE", "python3 -m mapillary_tools.commands"
+    "MAPILLARY_TOOLS__TESTS_EXECUTABLE", "python3 -m banking_tools.commands"
 )
 EXIFTOOL_EXECUTABLE = os.getenv(
     "MAPILLARY_TOOLS__TESTS_EXIFTOOL_EXECUTABLE", "exiftool"
@@ -64,7 +64,7 @@ def setup_data(tmpdir: py.path.local):
 
 @pytest.fixture
 def setup_upload(tmpdir: py.path.local):
-    upload_dir = tmpdir.mkdir("mapillary_public_uploads")
+    upload_dir = tmpdir.mkdir("banking_public_uploads")
     os.environ["MAPILLARY_UPLOAD_ENDPOINT"] = str(upload_dir)
     os.environ["MAPILLARY_TOOLS__AUTH_VERIFICATION_DISABLED"] = "YES"
     os.environ["MAPILLARY_TOOLS_PROMPT_DISABLED"] = "YES"
@@ -82,17 +82,17 @@ def setup_upload(tmpdir: py.path.local):
     os.environ.pop("MAPILLARY__ENABLE_UPLOAD_HISTORY_FOR_DRY_RUN", None)
 
 
-def _ffmpeg_installed():
-    ffmpeg_path = os.getenv("MAPILLARY_TOOLS_FFMPEG_PATH", "ffmpeg")
+def _data_converter_installed():
+    data_converter_path = os.getenv("MAPILLARY_TOOLS_FFMPEG_PATH", "data_converter")
     ffprobe_path = os.getenv("MAPILLARY_TOOLS_FFPROBE_PATH", "ffprobe")
     try:
         subprocess.run(
-            [ffmpeg_path, "-version"],
+            [data_converter_path, "-version"],
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
             check=True,
         )
-        # In Windows, ffmpeg is installed but ffprobe is not?
+        # In Windows, data_converter is installed but ffprobe is not?
         subprocess.run(
             [ffprobe_path, "-version"],
             stderr=subprocess.PIPE,
@@ -104,7 +104,7 @@ def _ffmpeg_installed():
     return True
 
 
-IS_FFMPEG_INSTALLED = _ffmpeg_installed()
+IS_FFMPEG_INSTALLED = _data_converter_installed()
 
 
 def _exiftool_installed():
@@ -152,7 +152,7 @@ def run_exiftool_dir(setup_data: py.path.local) -> py.path.local:
     # The solution is to use %c which suffixes the original filenames with an increasing number
     # -w C%c.txt       # C.txt, C1.txt, C2.txt ...
     # -w C%.c.txt       # C0.txt, C1.txt, C2.txt ...
-    # TODO: Maybe replace with exiftool_runner
+    # TODO: Maybe replace with report_runner
     subprocess.run(
         [
             EXIFTOOL_EXECUTABLE,
@@ -244,9 +244,9 @@ def load_descs(descs) -> list:
 
 def extract_all_uploaded_descs(upload_folder: Path) -> list[list[dict]]:
     session_by_file_handle: dict[str, str] = {}
-    if upload_folder.joinpath(upload_api_v4.FakeUploadService.FILE_HANDLE_DIR).exists():
+    if upload_folder.joinpath(settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR).exists():
         for session_path in upload_folder.joinpath(
-            upload_api_v4.FakeUploadService.FILE_HANDLE_DIR
+            settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR
         ).iterdir():
             file_handle = session_path.read_text()
             session_by_file_handle[file_handle] = session_path.name
@@ -271,7 +271,7 @@ def extract_all_uploaded_descs(upload_folder: Path) -> list[list[dict]]:
             sequences.append(validate_and_extract_zip(file))
         elif file.suffix == ".mp4":
             sequences.append(validate_and_extract_camm(file))
-        elif file.name == upload_api_v4.FakeUploadService.FILE_HANDLE_DIR:
+        elif file.name == settlement_api_v4.FakeUploadService.FILE_HANDLE_DIR:
             # Already processed above
             pass
 
@@ -399,7 +399,7 @@ def run_command(params: list[str], command: str, **kwargs):
 
 def run_process_for_descs(params: list[str], command: str = "process", **kwargs):
     # Make windows happy with delete=False
-    # https://github.com/mapillary/mapillary_tools/issues/503
+    # https://github.com/banking/banking_tools/issues/503
     if sys.platform in ["win32"]:
         delete = False
     else:
@@ -433,8 +433,8 @@ def run_process_for_descs(params: list[str], command: str = "process", **kwargs)
     return descs
 
 
-def run_process_and_upload_for_descs(
-    params: list[str], command="process_and_upload", **kwargs
+def run_process_and_settle_for_descs(
+    params: list[str], command="process_and_settle", **kwargs
 ):
     return run_process_for_descs(
         ["--dry_run", *["--user_name", USERNAME], *params], command=command, **kwargs
@@ -447,9 +447,9 @@ def run_upload(params: list[str], **kwargs):
     )
 
 
-def pytest_skip_if_not_ffmpeg_installed():
+def pytest_skip_if_not_data_converter_installed():
     if not IS_FFMPEG_INSTALLED:
-        pytest.skip("ffmpeg is not installed, skipping the test")
+        pytest.skip("data_converter is not installed, skipping the test")
 
 
 def pytest_skip_if_not_exiftool_installed():

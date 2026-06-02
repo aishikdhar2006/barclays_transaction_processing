@@ -348,7 +348,7 @@ def test_process_boolean_options(setup_data: py.path.local):
 GPX_CONTENT = """
     <gpx>
     <trk>
-        <name>Mapillary GPX</name>
+        <name>BankingPlatform GPX</name>
         <trkseg>
             <trkpt lat="0.02" lon="0.01">
             <ele>1</ele>
@@ -421,7 +421,7 @@ def test_geotagging_images_from_gpx(setup_data: py.path.local):
             {
                 "filename": str(Path(setup_data, "images", "V0370574.JPG")),
                 "error": {
-                    "type": "MapillaryOutsideGPXTrackError",
+                    "type": "BankingPlatformOutsideGPXTrackError",
                 },
             },
         ],
@@ -467,7 +467,7 @@ def test_geotagging_images_from_gpx_with_offset(setup_data: py.path.local):
             {
                 "filename": str(Path(setup_data, "images", "V0370574.JPG")),
                 "error": {
-                    "type": "MapillaryOutsideGPXTrackError",
+                    "type": "BankingPlatformOutsideGPXTrackError",
                 },
             },
         ],
@@ -512,7 +512,7 @@ def test_geotagging_images_from_gpx_use_gpx_start_time(setup_data: py.path.local
             {
                 "filename": str(Path(setup_data, "images", "V0370574.JPG")),
                 "error": {
-                    "type": "MapillaryOutsideGPXTrackError",
+                    "type": "BankingPlatformOutsideGPXTrackError",
                 },
             },
         ],
@@ -560,7 +560,7 @@ def test_geotagging_images_from_gpx_use_gpx_start_time_with_offset(
             {
                 "filename": str(Path(setup_data, "images", "V0370574.JPG")),
                 "error": {
-                    "type": "MapillaryOutsideGPXTrackError",
+                    "type": "BankingPlatformOutsideGPXTrackError",
                 },
             },
         ],
@@ -620,7 +620,7 @@ def test_process_video_geotag_source_gpx_not_found(setup_data: py.path.local):
     )
 
     assert len(descs) == 1
-    assert descs[0]["error"]["type"] == "MapillaryVideoGPSNotFoundError"
+    assert descs[0]["error"]["type"] == "BankingPlatformVideoGPSNotFoundError"
 
 
 def test_process_video_geotag_source_with_gopro_gpx_specified(
@@ -656,7 +656,7 @@ def test_process_geotag_with_gpx_pattern_not_found(setup_data: py.path.local):
     )
 
     assert len(descs) == 1
-    assert descs[0]["error"]["type"] == "MapillaryVideoGPSNotFoundError"
+    assert descs[0]["error"]["type"] == "BankingPlatformVideoGPSNotFoundError"
 
 
 def test_process_geotag_with_gpx_pattern(setup_data: py.path.local):
@@ -735,7 +735,7 @@ def test_process_geotag_everything_with_exiftool_not_found(setup_data: py.path.l
     assert len(exiftool_descs) > 0
     for d in exiftool_descs:
         assert "error" in d
-        assert d["error"]["type"] == "MapillaryExiftoolNotFoundError"
+        assert d["error"]["type"] == "BankingPlatformExiftoolNotFoundError"
 
 
 def test_process_geotag_everything_with_exiftool_not_found_overriden(
@@ -842,7 +842,7 @@ def test_process_geotag_with_exiftool_xml_pattern_missing_file(
     )
 
     assert len(descs) == 1
-    assert descs[0]["error"]["type"] == "MapillaryExifToolXMLNotFoundError"
+    assert descs[0]["error"]["type"] == "BankingPlatformExifToolXMLNotFoundError"
 
 
 def test_process_geotag_with_exiftool_xml_pattern_fallback(
@@ -867,4 +867,4 @@ def test_process_geotag_with_exiftool_xml_pattern_fallback(
     )
 
     assert len(descs) == 1
-    assert descs[0]["error"]["type"] == "MapillaryVideoGPSNotFoundError"
+    assert descs[0]["error"]["type"] == "BankingPlatformVideoGPSNotFoundError"

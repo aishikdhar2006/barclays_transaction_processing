@@ -6,9 +6,9 @@
 import json
 from pathlib import Path
 
-from mapillary_tools import geo, telemetry
-from mapillary_tools.exceptions import MapillaryMetadataValidationError
-from mapillary_tools.serializer.description import (
+from banking_tools import currency, telemetry
+from banking_tools.exceptions import BankingPlatformMetadataValidationError
+from banking_tools.serializer.description import (
     DescriptionJSONSerializer,
     ImageVideoDescriptionFileSchema,
     PointEncoder,
@@ -83,7 +83,7 @@ def test_validate_descs_not_ok():
         expected_error_message = desc.pop("expected_error_message", None)
         try:
             validate_image_desc(desc)
-        except MapillaryMetadataValidationError as ex:
+        except BankingPlatformMetadataValidationError as ex:
             assert expected_error_message == str(ex)
             errors += 1
     assert errors == len(descs)
@@ -124,7 +124,7 @@ def test_serialize_image_description_ok():
 
 
 def test_encode_base_point():
-    p = geo.Point(
+    p = currency.Point(
         time=1.5, lat=37.7749295, lon=-122.4194155, alt=10.1235, angle=90.1234
     )
     encoded = PointEncoder.encode(p)
@@ -140,7 +140,7 @@ def test_encode_base_point():
 def test_decode_base_point():
     entry = [1500, -122.4194155, 37.7749295, 10.124, 90.123]
     p = PointEncoder.decode(entry)
-    assert type(p) is geo.Point
+    assert type(p) is currency.Point
     assert p.time == 1.5
     assert p.lon == -122.4194155
     assert p.lat == 37.7749295
@@ -184,10 +184,10 @@ def test_decode_camm_gps_point():
 
 
 def test_encode_decode_roundtrip_base_point():
-    original = geo.Point(time=3.456, lat=40.7128, lon=-74.006, alt=5.5, angle=270.0)
+    original = currency.Point(time=3.456, lat=40.7128, lon=-74.006, alt=5.5, angle=270.0)
     encoded = PointEncoder.encode(original)
     decoded = PointEncoder.decode(encoded)
-    assert type(decoded) is geo.Point
+    assert type(decoded) is currency.Point
     # time is rounded to ms precision
     assert decoded.time == int(original.time * 1000) / 1000
     assert decoded.lat == round(original.lat, 7)
@@ -222,7 +222,7 @@ def test_decode_6_element_with_none_gps_epoch():
     entry = [1500, -122.4194, 37.7749, 10.0, 90.0, None]
     p = PointEncoder.decode(entry)
     # Should fall back to plain Point when 6th element is None
-    assert type(p) is geo.Point
+    assert type(p) is currency.Point
     assert p.time == 1.5
 
 

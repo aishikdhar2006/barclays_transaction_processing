@@ -11,7 +11,7 @@ import time
 import traceback
 
 import pytest
-from mapillary_tools.history import PersistentCache
+from banking_tools.history import PersistentCache
 
 
 def test_basic_operations_with_backend(tmpdir):

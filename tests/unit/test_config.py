@@ -6,7 +6,7 @@
 import typing as T
 
 import py.path
-from mapillary_tools import config
+from banking_tools import config
 
 
 def test_config_list_all_users(tmpdir: py.path.local):

@@ -6,25 +6,25 @@
 import json
 from pathlib import Path
 
-from mapillary_tools import exceptions, types
-from mapillary_tools.serializer import description
+from banking_tools import exceptions, types
+from banking_tools.serializer import description
 
 
 def test_all():
     all_excs = [
         getattr(exceptions, ex)
         for ex in dir(exceptions)
-        if ex.startswith("Mapillary") and ex.endswith("Error")
+        if ex.startswith("BankingPlatform") and ex.endswith("Error")
     ]
 
     all_desc_excs = [
-        exc for exc in all_excs if issubclass(exc, exceptions.MapillaryDescriptionError)
+        exc for exc in all_excs if issubclass(exc, exceptions.BankingPlatformDescriptionError)
     ]
 
     for exc in all_desc_excs:
-        if exc is exceptions.MapillaryOutsideGPXTrackError:
+        if exc is exceptions.BankingPlatformOutsideGPXTrackError:
             e = exc("hello", "world", "hey", "aa")
-        elif exc is exceptions.MapillaryDuplicationError:
+        elif exc is exceptions.BankingPlatformDuplicationError:
             e = exc("hello", {}, 1, float("inf"))
         else:
             e = exc("hello")

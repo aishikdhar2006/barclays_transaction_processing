@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 
 import requests
 
-from mapillary_tools import http
+from banking_tools import http
 
 
 class TestTruncate:

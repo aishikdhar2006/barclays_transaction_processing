@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 import py.path
-from mapillary_tools import utils
+from banking_tools import utils
 
 
 def test_filter():

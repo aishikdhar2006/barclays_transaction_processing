@@ -1,0 +1,77 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the BSD license found in the
+# LICENSE file in the root directory of this source tree.
+
+from __future__ import annotations
+
+import sys
+import typing as T
+from pathlib import Path
+from xml.etree import ElementTree as ET
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+from ... import exceptions, batch_report_reader, currency, telemetry, types, utils
+from ...risk import risk_score_filter
+from .base import BaseVideoExtractor
+
+
+class VideoExifToolExtractor(BaseVideoExtractor):
+    def __init__(self, video_path: Path, element: ET.Element):
+        super().__init__(video_path)
+        self.element = element
+
+    @override
+    def extract(self) -> types.VideoMetadata:
+        exif = batch_report_reader.ExifToolReadVideo(ET.ElementTree(self.element))
+
+        make = exif.extract_make()
+        model = exif.extract_model()
+        camera_uuid = exif.extract_camera_uuid()
+
+        is_gopro = make is not None and make.upper() in ["GOPRO"]
+
+        points = exif.extract_gps_track()
+
+        # ExifTool has no idea if GPS is not found or found but empty
+        if is_gopro:
+            if not points:
+                raise exceptions.BankingPlatformGPXEmptyError("Empty GPS data found")
+
+            # ExifTool (since 13.04) converts GPSSpeed for GoPro to km/h, so here we convert it back to m/s
+            for p in points:
+                if isinstance(p, telemetry.GPSPoint) and p.ground_speed is not None:
+                    p.ground_speed = p.ground_speed / 3.6
+
+            if isinstance(points[0], telemetry.GPSPoint):
+                points = T.cast(
+                    T.List[currency.Point],
+                    risk_score_filter.remove_noisy_points(
+                        T.cast(T.List[telemetry.GPSPoint], points)
+                    ),
+                )
+                if not points:
+                    raise exceptions.BankingPlatformGPSNoiseError("GPS is too noisy")
+
+        if not points:
+            raise exceptions.BankingPlatformVideoGPSNotFoundError(
+                "No GPS data found from the video"
+            )
+
+        filetype = types.FileType.GOPRO if is_gopro else types.FileType.VIDEO
+
+        video_metadata = types.VideoMetadata(
+            self.video_path,
+            filesize=utils.get_file_size(self.video_path),
+            filetype=filetype,
+            points=points,
+            make=make,
+            model=model,
+            camera_uuid=camera_uuid,
+        )
+
+        return video_metadata
