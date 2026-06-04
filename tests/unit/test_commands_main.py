@@ -51,8 +51,8 @@ class TestLogParams:
     def test_logs_short_list(self, caplog):
         with caplog.at_level(logging.DEBUG, logger="banking_tools"):
             _log_params({"paths": [Path("/a"), Path("/b")]})
-        assert "/a" in caplog.text
-        assert "/b" in caplog.text
+        assert str(Path("/a")) in caplog.text
+        assert str(Path("/b")) in caplog.text
 
     def test_logs_long_list_truncated(self, caplog):
         with caplog.at_level(logging.DEBUG, logger="banking_tools"):

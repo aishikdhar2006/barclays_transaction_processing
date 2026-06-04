@@ -312,13 +312,16 @@ class TestSetupApiStats:
             "entity_size": 1024,
             "offset": 0,
         }
-        emitter.emit("upload_start", payload)
-        assert "upload_start_time" in payload
-        assert "upload_total_time" in payload
+        # Mock time so elapsed is deterministic across platforms (Windows
+        # time.time() resolution is too coarse for instantaneous emits).
+        with patch.object(settlement.time, "time", side_effect=[100.0, 105.0]):
+            emitter.emit("upload_start", payload)
+            assert "upload_start_time" in payload
+            assert "upload_total_time" in payload
 
-        emitter.emit("upload_end", payload)
+            emitter.emit("upload_end", payload)
         assert "upload_end_time" in payload
-        assert payload["upload_total_time"] > 0
+        assert payload["upload_total_time"] == 5.0
 
     def test_collects_fetch_offset(self):
         emitter = processor.EventEmitter()
@@ -340,10 +343,10 @@ class TestSetupApiStats:
             "entity_size": 1024,
             "offset": 0,
         }
-        emitter.emit("upload_start", payload)
-        time.sleep(0.01)
-        emitter.emit("upload_retrying", payload)
-        assert payload["upload_total_time"] > 0
+        with patch.object(settlement.time, "time", side_effect=[100.0, 105.0]):
+            emitter.emit("upload_start", payload)
+            emitter.emit("upload_retrying", payload)
+        assert payload["upload_total_time"] == 5.0
         assert "upload_last_restart_time" not in payload
 
     def test_finished_appends_to_stats(self):
@@ -596,13 +599,13 @@ class TestSetupApiStatsExtended:
         emitter = processor.EventEmitter()
         settlement._setup_api_stats(emitter)
 
-        start = time.time()
         payload: T.Any = {
-            "upload_last_restart_time": start,
+            "upload_last_restart_time": 100.0,
             "upload_total_time": 0,
         }
-        emitter.emit("upload_retrying", payload)
-        assert payload["upload_total_time"] > 0
+        with patch.object(settlement.time, "time", return_value=105.0):
+            emitter.emit("upload_retrying", payload)
+        assert payload["upload_total_time"] == 5.0
         assert "upload_last_restart_time" not in payload
 
 

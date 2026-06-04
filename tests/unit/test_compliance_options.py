@@ -51,7 +51,10 @@ class TestSourcePathOption:
     def test_absolute_pattern(self):
         opt = SourcePathOption(pattern="/abs/path/%f")
         result = opt.resolve(Path("/tmp/abc.mov"))
-        assert result == Path("/abs/path/abc.mov")
+        # Compare via POSIX form so the assertion holds on Windows, where
+        # resolve() prepends a drive letter (e.g. D:/abs/path/abc.mov).
+        assert result.name == "abc.mov"
+        assert result.as_posix().endswith("/abs/path/abc.mov")
 
     def test_neither_raises(self):
         with pytest.raises(ValueError, match="Either pattern or source_path"):

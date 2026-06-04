@@ -3,6 +3,7 @@
 # This source code is licensed under the BSD license found in the
 # LICENSE file in the root directory of this source tree.
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import requests
@@ -180,7 +181,7 @@ class TestBuildUploadCachePath:
         with patch.object(constants, "UPLOAD_CACHE_DIR", "/tmp/test_cache"):
             path = processor._build_upload_cache_path(opts)
         assert "cached_file_handles" in str(path)
-        assert "/tmp/test_cache" in str(path)
+        assert str(Path("/tmp/test_cache")) in str(path)
 
 
 class TestMaybeCreatePersistentCacheInstance:
