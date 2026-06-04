@@ -128,7 +128,7 @@ class TestReadableHttpError:
         result = http.readable_http_error(err)
         assert "404" in result
         assert "GET" in result
-        assert "api.com" in result
+        assert "https://api.com/resource" in result
 
     def test_readable_response(self):
         resp = MagicMock(spec=requests.Response)
