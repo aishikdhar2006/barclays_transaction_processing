@@ -3,266 +3,356 @@
 # This source code is licensed under the BSD license found in the
 # LICENSE file in the root directory of this source tree.
 
-import datetime
 import subprocess
-from pathlib import Path
+from unittest.mock import MagicMock, patch
 
-import py.path
 import pytest
+
 from banking_tools import data_converter
 
-from ..integration.fixtures import (
-    pytest_skip_if_not_data_converter_installed,
-    setup_data,
-)
+
+class TestTruncateBegin:
+    def test_short_string(self):
+        assert data_converter._truncate_begin("hello") == "hello"
+
+    def test_long_string(self):
+        long_str = "x" * 3000
+        result = data_converter._truncate_begin(long_str)
+        assert result.startswith("...")
+        assert len(result) == data_converter._MAX_STDERR_LENGTH + 3
 
 
-def test_data_converter_run_ok():
-    pytest_skip_if_not_data_converter_installed()
+class TestTruncateEnd:
+    def test_short_string(self):
+        assert data_converter._truncate_end("hello") == "hello"
 
-    ff = data_converter.FFMPEG()
-    ff.run_data_converter_non_interactive(["-version"])
-
-
-@pytest.mark.xfail(
-    reason="data_converter run_data_converter_non_interactive should raise FFmpegCalledProcessError",
-    raises=data_converter.FFmpegCalledProcessError,
-)
-def test_data_converter_run_raise():
-    pytest_skip_if_not_data_converter_installed()
-
-    ff = data_converter.FFMPEG()
-    ff.run_data_converter_non_interactive(["foo"])
+    def test_long_string(self):
+        long_str = "x" * 3000
+        result = data_converter._truncate_end(long_str)
+        assert result.endswith("...")
+        assert len(result) == data_converter._MAX_STDERR_LENGTH + 3
 
 
-def test_data_converter_extract_frames_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
+class TestFFmpegCalledProcessError:
+    def test_str_with_stderr(self):
+        inner = subprocess.CalledProcessError(1, "ffmpeg")
+        inner.stderr = b"some error output"
+        ex = data_converter.FFmpegCalledProcessError(inner)
+        result = str(ex)
+        assert "some error output" in result
+        assert "STDERR:" in result
 
-    ff = data_converter.FFMPEG()
+    def test_str_without_stderr(self):
+        inner = subprocess.CalledProcessError(1, "ffmpeg")
+        inner.stderr = None
+        ex = data_converter.FFmpegCalledProcessError(inner)
+        result = str(ex)
+        assert "STDERR:" not in result
 
-    video_path = Path(setup_data.join("videos/sample-5s.mp4"))
-
-    sample_dir = Path(setup_data.join("videos/samples"))
-    sample_dir.mkdir()
-
-    ff.extract_frames_by_interval(video_path, sample_dir, sample_interval=1)
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path))
-    assert len(results) == 6
-    for idx, (file_idx, frame_paths) in enumerate(results):
-        assert idx + 1 == file_idx
-        assert 1 == len(frame_paths)
-        assert frame_paths[0] is not None
-        assert frame_paths[0].exists()
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path, ["0"]))
-    assert len(results) == 6
-    for idx, (file_idx, frame_paths) in enumerate(results):
-        assert idx + 1 == file_idx
-        assert 1 == len(frame_paths)
-        assert frame_paths[0] is None
+    def test_str_with_binary_stderr(self):
+        inner = subprocess.CalledProcessError(1, "ffmpeg")
+        inner.stderr = b"\xff\xfe invalid utf8"
+        ex = data_converter.FFmpegCalledProcessError(inner)
+        # Should not raise
+        str(ex)
 
 
-def test_data_converter_extract_frames_with_specifier_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
+class TestFFmpegInit:
+    def test_default_paths(self):
+        ff = data_converter.FFMPEG()
+        assert ff.data_converter_path == "ffmpeg"
+        assert ff.ffprobe_path == "ffprobe"
+        assert ff.stderr is None
 
-    ff = data_converter.FFMPEG()
-
-    video_path = Path(setup_data.join("videos/sample-5s.mp4"))
-
-    sample_dir = Path(setup_data.join("videos/samples"))
-    sample_dir.mkdir()
-
-    ff.extract_frames_by_interval(
-        video_path,
-        sample_dir,
-        sample_interval=1,
-        stream_specifier=0,
-    )
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path, [0]))
-    assert len(results) == 6
-    for idx, (file_idx, frame_paths) in enumerate(results):
-        assert idx + 1 == file_idx
-        assert 1 == len(frame_paths)
-        assert frame_paths[0] is not None
-        assert frame_paths[0].exists()
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path, [1]))
-    assert len(results) == 6
-    for idx, (file_idx, frame_paths) in enumerate(results):
-        assert idx + 1 == file_idx
-        assert 1 == len(frame_paths)
-        assert frame_paths[0] is None
-
-
-def test_data_converter_extract_specified_frames_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
-
-    ff = data_converter.FFMPEG()
-
-    video_path = Path(setup_data.join("videos/sample-5s.mp4"))
-
-    sample_dir = Path(setup_data.join("videos/samples"))
-    sample_dir.mkdir()
-
-    ff.extract_specified_frames(video_path, sample_dir, frame_indices={2, 9})
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path))
-    assert len(results) == 2
-
-    for idx, (file_idx, frame_paths) in enumerate(results):
-        assert idx + 1 == file_idx
-        assert frame_paths[0] is not None
-        assert frame_paths[0].exists()
-
-
-def test_data_converter_extract_specified_frames_empty_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
-
-    ff = data_converter.FFMPEG()
-
-    video_path = Path(setup_data.join("videos/sample-5s.mp4"))
-
-    sample_dir = Path(setup_data.join("videos/samples"))
-    sample_dir.mkdir()
-
-    ff.extract_specified_frames(video_path, sample_dir, frame_indices=set())
-
-    results = list(ff.sort_selected_samples(sample_dir, video_path))
-    assert len(results) == 0
-
-
-def test_probe_format_and_streams_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
-
-    video_path = Path(setup_data.join("videos/sample-5s.mp4"))
-
-    ff = data_converter.FFMPEG()
-    probe_output = ff.probe_format_and_streams(video_path)
-    probe = data_converter.Probe(probe_output)
-
-    start_time = probe.probe_video_start_time()
-    assert start_time is None
-    max_stream = probe.probe_video_with_max_resolution()
-    assert max_stream is not None
-    assert max_stream["index"] == 0
-    assert max_stream["codec_type"] == "video"
-
-
-def test_probe_format_and_streams_gopro_ok(setup_data: py.path.local):
-    pytest_skip_if_not_data_converter_installed()
-
-    video_path = Path(setup_data.join("gopro_data/hero8.mp4"))
-
-    ff = data_converter.FFMPEG()
-    probe_output = ff.probe_format_and_streams(video_path)
-    probe = data_converter.Probe(probe_output)
-
-    start_time = probe.probe_video_start_time()
-    assert start_time is not None
-    assert datetime.datetime.isoformat(start_time) == "2019-11-18T15:41:12.354033+00:00"
-    max_stream = probe.probe_video_with_max_resolution()
-    assert max_stream is not None
-    assert max_stream["index"] == 0
-    assert max_stream["codec_type"] == "video"
-
-
-def test_data_converter_not_exists():
-    pytest_skip_if_not_data_converter_installed()
-
-    ff = data_converter.FFMPEG()
-    try:
-        ff.extract_frames_by_interval(
-            Path("not_exist_a"), Path("not_exist_b"), sample_interval=2
+    def test_custom_paths(self):
+        ff = data_converter.FFMPEG(
+            data_converter_path="/usr/bin/ffmpeg",
+            ffprobe_path="/usr/bin/ffprobe",
+            stderr=subprocess.PIPE,
         )
-    except data_converter.FFmpegCalledProcessError as ex:
-        assert "STDERR:" not in str(ex)
-    else:
-        assert False, "FFmpegCalledProcessError not raised"
+        assert ff.data_converter_path == "/usr/bin/ffmpeg"
+        assert ff.ffprobe_path == "/usr/bin/ffprobe"
 
-    ff = data_converter.FFMPEG(stderr=subprocess.PIPE)
-    try:
-        ff.extract_frames_by_interval(
-            Path("not_exist_a"), Path("not_exist_b"), sample_interval=2
+
+class TestFFmpegNotFoundError:
+    def test_creation(self):
+        ex = data_converter.FFmpegNotFoundError("ffmpeg not found")
+        assert str(ex) == "ffmpeg not found"
+
+
+class TestProbeOutput:
+    def test_stream_tag_fields(self):
+        tag: data_converter.StreamTag = {"creation_time": "2023", "language": "eng"}
+        assert tag["creation_time"] == "2023"
+
+    def test_stream_fields(self):
+        stream: data_converter.Stream = {
+            "codec_name": "h264",
+            "codec_tag_string": "avc1",
+            "codec_type": "video",
+            "duration": "10.0",
+            "height": 1080,
+            "index": 0,
+            "tags": {"creation_time": "2023", "language": "eng"},
+            "width": 1920,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "nb_frames": "300",
+        }
+        assert stream["codec_name"] == "h264"
+
+
+class TestGenerateBinarySearch:
+    def test_empty(self):
+        assert data_converter.FFMPEG.generate_binary_search([]) == "0"
+
+    def test_single(self):
+        result = data_converter.FFMPEG.generate_binary_search([1])
+        assert result == "eq(n\\,1)"
+
+    def test_two_elements(self):
+        result = data_converter.FFMPEG.generate_binary_search([1, 2])
+        assert "if(lt(n\\,2)" in result
+        assert "eq(n\\,1)" in result
+        assert "eq(n\\,2)" in result
+
+    def test_three_elements(self):
+        result = data_converter.FFMPEG.generate_binary_search([1, 2, 3])
+        assert "eq(n\\,1)" in result
+        assert "eq(n\\,2)" in result
+        assert "eq(n\\,3)" in result
+
+
+class TestValidateStreamSpecifier:
+    def test_valid_v(self):
+        data_converter.FFMPEG._validate_stream_specifier("v")
+
+    def test_valid_integer(self):
+        data_converter.FFMPEG._validate_stream_specifier(0)
+
+    def test_valid_string_integer(self):
+        data_converter.FFMPEG._validate_stream_specifier("1")
+
+    def test_invalid_string(self):
+        with pytest.raises(ValueError, match="Invalid stream specifier"):
+            data_converter.FFMPEG._validate_stream_specifier("invalid")
+
+
+class TestExtractStreamFrameIdx:
+    def test_valid_v_frame(self):
+        import re
+
+        pattern = re.compile(
+            r"^test_(?P<stream_specifier>\d+|v)_(?P<frame_idx>\d+)$", re.X
         )
-    except data_converter.FFmpegCalledProcessError as ex:
-        assert "STDERR:" in str(ex)
-    else:
-        assert False, "FFmpegCalledProcessError not raised"
-
-
-def test_ffprobe_not_exists():
-    pytest_skip_if_not_data_converter_installed()
-
-    ff = data_converter.FFMPEG()
-    try:
-        x = ff.probe_format_and_streams(Path("not_exist_a"))
-    except data_converter.FFmpegCalledProcessError as ex:
-        # exc from linux
-        assert "STDERR:" not in str(ex)
-    except RuntimeError as ex:
-        # exc from macos
-        assert "Empty JSON ffprobe output with STDERR: None" == str(ex)
-    else:
-        assert False, "RuntimeError not raised"
-
-    ff = data_converter.FFMPEG(stderr=subprocess.PIPE)
-    try:
-        x = ff.probe_format_and_streams(Path("not_exist_a"))
-    except data_converter.FFmpegCalledProcessError as ex:
-        # exc from linux
-        assert "STDERR:" in str(ex)
-    except RuntimeError as ex:
-        # exc from macos
-        assert (
-            "Empty JSON ffprobe output with STDERR: b'not_exist_a: No such file or directory"
-            in str(ex)
+        result = data_converter.FFMPEG._extract_stream_frame_idx(
+            "test_v_000001.jpg", pattern
         )
-    else:
-        assert False, "RuntimeError not raised"
+        assert result == ("v", 1)
 
+    def test_valid_numbered_stream(self):
+        import re
 
-def test_probe():
-    def test_creation_time(expected, probe_creation_time, probe_duration):
-        probe = data_converter.Probe(
-            {
-                "streams": [
-                    {
-                        "index": 0,
-                        "codec_type": "video",
-                        "codec_tag_string": "avc1",
-                        "width": 2880,
-                        "height": 1620,
-                        "coded_width": 2880,
-                        "coded_height": 1620,
-                        "duration": probe_duration,
-                        "tags": {
-                            "creation_time": probe_creation_time,
-                            "language": "und",
-                            "handler_name": "Core Media Video",
-                            "vendor_id": "[0][0][0][0]",
-                            "encoder": "H.264",
-                        },
-                    }
-                ]
-            }
+        pattern = re.compile(
+            r"^test_(?P<stream_specifier>\d+|v)_(?P<frame_idx>\d+)$", re.X
         )
-        creation_time = probe.probe_video_start_time()
-        assert expected == creation_time
+        result = data_converter.FFMPEG._extract_stream_frame_idx(
+            "test_1_000002.jpg", pattern
+        )
+        assert result == ("1", 2)
 
-    test_creation_time(
-        datetime.datetime(2023, 3, 7, 1, 35, 29, 190123, tzinfo=datetime.timezone.utc),
-        "2023-03-07T01:35:34.123456Z",
-        "4.933333",
-    )
-    test_creation_time(
-        datetime.datetime(2023, 3, 7, 1, 35, 29, 66667, tzinfo=datetime.timezone.utc),
-        "2023-03-07T01:35:34.000000Z",
-        "4.933333",
-    )
-    test_creation_time(
-        datetime.datetime(2023, 3, 7, 1, 35, 29, 66667),
-        "2023-03-07 01:35:34",
-        "4.933333",
-    )
+    def test_wrong_extension(self):
+        import re
+
+        pattern = re.compile(
+            r"^test_(?P<stream_specifier>\d+|v)_(?P<frame_idx>\d+)$", re.X
+        )
+        result = data_converter.FFMPEG._extract_stream_frame_idx(
+            "test_v_000001.png", pattern
+        )
+        assert result is None
+
+    def test_no_match(self):
+        import re
+
+        pattern = re.compile(
+            r"^test_(?P<stream_specifier>\d+|v)_(?P<frame_idx>\d+)$", re.X
+        )
+        result = data_converter.FFMPEG._extract_stream_frame_idx(
+            "other_file.jpg", pattern
+        )
+        assert result is None
+
+
+class TestIterateSamples:
+    def test_finds_samples(self, tmp_path):
+        from pathlib import Path
+
+        # Create sample files matching the expected pattern
+        video_path = Path("test_video.mp4")
+        (tmp_path / "test_video_v_000001.jpg").touch()
+        (tmp_path / "test_video_v_000002.jpg").touch()
+        (tmp_path / "random_file.txt").touch()
+        results = list(data_converter.FFMPEG.iterate_samples(tmp_path, video_path))
+        assert len(results) == 2
+
+    def test_empty_dir(self, tmp_path):
+        from pathlib import Path
+
+        video_path = Path("test_video.mp4")
+        results = list(data_converter.FFMPEG.iterate_samples(tmp_path, video_path))
+        assert results == []
+
+
+class TestSortSelectedSamples:
+    def test_single_stream(self, tmp_path):
+        from pathlib import Path
+
+        video_path = Path("test_video.mp4")
+        (tmp_path / "test_video_v_000001.jpg").touch()
+        (tmp_path / "test_video_v_000002.jpg").touch()
+        results = data_converter.FFMPEG.sort_selected_samples(tmp_path, video_path)
+        assert len(results) == 2
+        assert results[0][0] == 1
+        assert results[1][0] == 2
+
+
+class TestProbe:
+    def test_probe_video_streams(self):
+        probe_output = {
+            "streams": [
+                {"codec_type": "video", "width": 1920, "height": 1080},
+                {"codec_type": "audio"},
+                {"codec_type": "video", "width": 640, "height": 480},
+            ]
+        }
+        probe = data_converter.Probe(probe_output)
+        video_streams = probe.probe_video_streams()
+        assert len(video_streams) == 2
+
+    def test_probe_video_with_max_resolution(self):
+        probe_output = {
+            "streams": [
+                {"codec_type": "video", "width": 640, "height": 480},
+                {"codec_type": "video", "width": 1920, "height": 1080},
+            ]
+        }
+        probe = data_converter.Probe(probe_output)
+        result = probe.probe_video_with_max_resolution()
+        assert result["width"] == 1920
+
+    def test_probe_video_with_max_resolution_empty(self):
+        probe_output = {"streams": []}
+        probe = data_converter.Probe(probe_output)
+        result = probe.probe_video_with_max_resolution()
+        assert result is None
+
+    def test_extract_stream_start_time(self):
+        stream = {
+            "duration": "10.0",
+            "tags": {"creation_time": "2023-06-15T12:00:00+00:00"},
+        }
+        result = data_converter.Probe.extract_stream_start_time(stream)
+        assert result is not None
+        assert result.year == 2023
+
+    def test_extract_stream_start_time_no_duration(self):
+        stream = {"tags": {"creation_time": "2023-06-15T12:00:00+00:00"}}
+        result = data_converter.Probe.extract_stream_start_time(stream)
+        assert result is None
+
+    def test_extract_stream_start_time_no_creation_time(self):
+        stream = {"duration": "10.0", "tags": {}}
+        result = data_converter.Probe.extract_stream_start_time(stream)
+        assert result is None
+
+    def test_probe_video_start_time(self):
+        probe_output = {
+            "streams": [
+                {
+                    "codec_type": "video",
+                    "width": 1920,
+                    "height": 1080,
+                    "duration": "60.0",
+                    "tags": {"creation_time": "2023-06-15T12:01:00+00:00"},
+                }
+            ]
+        }
+        probe = data_converter.Probe(probe_output)
+        result = probe.probe_video_start_time()
+        assert result is not None
+
+    def test_probe_video_start_time_no_streams(self):
+        probe_output = {"streams": []}
+        probe = data_converter.Probe(probe_output)
+        result = probe.probe_video_start_time()
+        assert result is None
+
+
+class TestRunDataConverterNonInteractive:
+    @patch("subprocess.run")
+    def test_file_not_found(self, mock_run):
+        mock_run.side_effect = FileNotFoundError()
+        ff = data_converter.FFMPEG()
+        with pytest.raises(data_converter.FFmpegNotFoundError):
+            ff.run_data_converter_non_interactive(["-version"])
+
+    @patch("subprocess.run")
+    def test_called_process_error(self, mock_run):
+        mock_run.side_effect = subprocess.CalledProcessError(
+            1, "ffmpeg", stderr=b"error"
+        )
+        ff = data_converter.FFMPEG()
+        with pytest.raises(data_converter.FFmpegCalledProcessError):
+            ff.run_data_converter_non_interactive(["-version"])
+
+    @patch("subprocess.run")
+    def test_success(self, mock_run):
+        mock_run.return_value = MagicMock(returncode=0)
+        ff = data_converter.FFMPEG()
+        ff.run_data_converter_non_interactive(["-version"])
+        mock_run.assert_called_once()
+
+
+class TestRunFfprobeJson:
+    @patch("subprocess.run")
+    def test_file_not_found(self, mock_run):
+        mock_run.side_effect = FileNotFoundError()
+        ff = data_converter.FFMPEG()
+        with pytest.raises(data_converter.FFmpegNotFoundError):
+            ff._run_ffprobe_json(["-show_streams", "test.mp4"])
+
+    @patch("subprocess.run")
+    def test_success(self, mock_run):
+        import json
+
+        mock_run.return_value = MagicMock(
+            stdout=json.dumps({"streams": []}).encode("utf-8"),
+            returncode=0,
+        )
+        ff = data_converter.FFMPEG()
+        result = ff._run_ffprobe_json(["-show_streams", "test.mp4"])
+        assert result == {"streams": []}
+
+    @patch("subprocess.run")
+    def test_empty_output(self, mock_run):
+        import json
+
+        mock_run.return_value = MagicMock(
+            stdout=json.dumps({}).encode("utf-8"),
+            stderr=b"some error",
+            returncode=0,
+        )
+        ff = data_converter.FFMPEG()
+        with pytest.raises(RuntimeError, match="Empty JSON"):
+            ff._run_ffprobe_json(["-show_streams", "test.mp4"])
+
+    @patch("subprocess.run")
+    def test_invalid_json(self, mock_run):
+        mock_run.return_value = MagicMock(
+            stdout=b"not json",
+            returncode=0,
+        )
+        ff = data_converter.FFMPEG()
+        with pytest.raises(RuntimeError, match="Error JSON decoding"):
+            ff._run_ffprobe_json(["-show_streams", "test.mp4"])

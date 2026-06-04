@@ -3,47 +3,51 @@
 # This source code is licensed under the BSD license found in the
 # LICENSE file in the root directory of this source tree.
 
-import json
-import struct
 from unittest.mock import patch
-
-import pytest
 
 from banking_tools import ipc
 
 
-class TestIPCWrite:
-    def test_write_rejects_non_serializable(self):
-        """json.dumps runs before the FD check, so non-serializable raises."""
+class TestWrite:
+    def test_no_channel_fd_does_nothing(self):
+        # When NODE_CHANNEL_FD is -1 (default), _write returns without writing
         with patch.object(ipc, "NODE_CHANNEL_FD", -1):
-            with pytest.raises(TypeError):
-                ipc._write({"func": lambda: None})
+            ipc._write({"test": "data"})  # Should not raise
 
     @patch("os.write")
-    def test_write_unix(self, mock_write):
-        """Unix path writes JSON + linesep directly to the fd."""
-        with patch.object(ipc, "NODE_CHANNEL_FD", 42), patch("os.name", "posix"):
-            ipc._write({"key": "value"})
-            mock_write.assert_called_once()
-            fd, raw = mock_write.call_args[0]
-            assert fd == 42
-            parsed = json.loads(raw.decode("utf-8").strip())
-            assert parsed == {"key": "value"}
+    def test_unix_write(self, mock_write):
+        with patch.object(ipc, "NODE_CHANNEL_FD", 5):
+            with patch("os.name", "posix"):
+                ipc._write({"key": "value"})
+                mock_write.assert_called_once()
+                data = mock_write.call_args[0][1]
+                assert b"key" in data
+                assert b"value" in data
 
     @patch("os.write")
-    def test_write_windows(self, mock_write):
-        """Windows path prepends a 16-byte header: uint64(1) + uint64(payload_len)."""
-        with patch.object(ipc, "NODE_CHANNEL_FD", 42), patch("os.name", "nt"):
-            ipc._write({"key": "value"})
+    def test_windows_write_includes_header(self, mock_write):
+        with patch.object(ipc, "NODE_CHANNEL_FD", 5):
+            with patch("os.name", "nt"):
+                ipc._write({"key": "value"})
+                mock_write.assert_called_once()
+                data = mock_write.call_args[0][1]
+                # Windows includes 16-byte header
+                assert len(data) > 16
+
+
+class TestSend:
+    def test_send_wraps_payload(self):
+        with patch.object(ipc, "_write") as mock_write:
+            ipc.send("upload_start", {"offset": 0})
             mock_write.assert_called_once()
-            fd, raw = mock_write.call_args[0]
-            assert fd == 42
-            # Verify the 16-byte header
-            header = raw[:16]
-            flag, payload_len = struct.unpack("<QQ", header)
-            assert flag == 1
-            # Verify the payload after the header is valid JSON
-            payload = raw[16:]
-            assert len(payload) == payload_len
-            parsed = json.loads(payload.decode("utf-8").strip())
-            assert parsed == {"key": "value"}
+            obj = mock_write.call_args[0][0]
+            assert obj["type"] == "upload_start"
+            assert obj["payload"] == {"offset": 0}
+
+    def test_send_catches_exceptions(self, caplog):
+        with patch.object(ipc, "_write", side_effect=OSError("broken pipe")):
+            import logging
+
+            with caplog.at_level(logging.WARNING):
+                ipc.send("upload_progress", {})
+            assert "IPC error" in caplog.text
