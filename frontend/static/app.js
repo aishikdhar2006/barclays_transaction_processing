@@ -37,7 +37,14 @@ async function loadCommands() {
     const li = document.createElement("li");
     li.className = "command-item";
     li.dataset.name = cmd.name;
-    li.innerHTML = `<span class="name">${cmd.name}</span><span class="sub">${cmd.description}</span>`;
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "name";
+    nameSpan.textContent = cmd.name;
+    const subSpan = document.createElement("span");
+    subSpan.className = "sub";
+    subSpan.textContent = cmd.description;
+    li.appendChild(nameSpan);
+    li.appendChild(subSpan);
     li.addEventListener("click", () => selectCommand(cmd, li));
     els.commandList.appendChild(li);
   });
