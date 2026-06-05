@@ -38,10 +38,12 @@ class TestCanonicalPath:
         result = canonical_path(Path("/tmp/test.jpg"))
         assert result == Path("/tmp/test.jpg").resolve().as_posix()
 
-    def test_relative_resolves(self):
+    def test_relative_resolves(self, tmp_path, monkeypatch):
+        (tmp_path / "test.jpg").write_bytes(b"")
+        monkeypatch.chdir(tmp_path)
         result = canonical_path(Path("test.jpg"))
-        assert result.endswith("test.jpg")
-        assert "/" in result
+        assert result == (tmp_path / "test.jpg").resolve().as_posix()
+        assert result != "test.jpg"
 
 
 class TestFindRdfDescriptionPath:
