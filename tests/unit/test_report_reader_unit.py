@@ -36,7 +36,7 @@ class TestExpandTag:
 class TestCanonicalPath:
     def test_basic(self):
         result = canonical_path(Path("/tmp/test.jpg"))
-        assert result == "/tmp/test.jpg"
+        assert result == Path("/tmp/test.jpg").resolve().as_posix()
 
     def test_relative_resolves(self):
         result = canonical_path(Path("test.jpg"))
