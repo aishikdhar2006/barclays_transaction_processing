@@ -1,0 +1,4 @@
+# Dependencies for the optional web UI (frontend/server.py).
+# Install with:  pip install -r frontend/requirements.txt
+fastapi>=0.110
+uvicorn[standard]>=0.27

@@ -1,0 +1,57 @@
+<!--
+Copyright (c) BankingPlatform, Inc. and affiliates.
+
+This source code is licensed under the BSD license found in the
+LICENSE file in the root directory of this source tree.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>banking_tools UI</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>banking_tools</h1>
+      <span id="version" class="version">loading…</span>
+    </header>
+
+    <main class="layout">
+      <section class="panel commands-panel">
+        <h2>Commands</h2>
+        <ul id="command-list" class="command-list"></ul>
+      </section>
+
+      <section class="panel run-panel">
+        <h2 id="selected-command">Select a command</h2>
+        <p id="selected-description" class="description"></p>
+
+        <label for="args" class="args-label">Arguments</label>
+        <input
+          id="args"
+          class="args-input"
+          type="text"
+          placeholder="e.g. tests/data/images --skip_process_errors"
+          autocomplete="off"
+        />
+
+        <div class="button-row">
+          <button id="run-btn" class="btn btn-primary" disabled>Run</button>
+          <button id="help-btn" class="btn" disabled>Show --help</button>
+          <button id="clear-btn" class="btn">Clear output</button>
+        </div>
+
+        <div class="output-header">
+          <span>Output</span>
+          <span id="status-badge" class="badge"></span>
+        </div>
+        <pre id="invocation" class="invocation"></pre>
+        <pre id="output" class="output">Output will appear here.</pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
