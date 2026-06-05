@@ -13,6 +13,7 @@ never changes the behaviour of the underlying tool. The static single-page UI in
 
 from __future__ import annotations
 
+import re
 import shlex
 import subprocess
 import sys
@@ -39,6 +40,11 @@ COMMANDS: dict[str, str] = {
     "archive": "Archive processed transactions for long-term storage.",
 }
 
+# Characters allowed in a single CLI argument.  This rejects shell
+# metacharacters (;|&$` etc.) while still accepting paths, flags, numbers,
+# and quoted values that shlex.split already unquoted.
+_SAFE_ARG_PATTERN: re.Pattern[str] = re.compile(r"^[\w./@:=,+\-\\~]+$")
+
 # How long a single command is allowed to run before we give up, in seconds.
 RUN_TIMEOUT_SECONDS = 300
 
@@ -48,6 +54,21 @@ app = FastAPI(title="banking_tools UI", version="1.0.0")
 class RunRequest(BaseModel):
     command: str
     args: str = ""
+
+
+def _sanitize_args(raw: str) -> list[str]:
+    """Parse *raw* into a list of CLI tokens and reject unsafe characters.
+
+    We use ``shlex.split`` for correct quoting, then validate each token
+    against ``_SAFE_ARG_PATTERN`` to block shell metacharacters.  This keeps
+    the subprocess call safe even though the argv ultimately comes from
+    user-supplied input.
+    """
+    parts = shlex.split(raw)
+    for part in parts:
+        if not _SAFE_ARG_PATTERN.match(part):
+            raise ValueError(f"Argument contains disallowed characters: {part!r}")
+    return parts
 
 
 class RunResponse(BaseModel):
@@ -63,10 +84,13 @@ def _base_argv() -> list[str]:
 
 
 def _run_cli(extra_args: list[str]) -> RunResponse:
+    # The executable (sys.executable) and module are hard-coded; only the
+    # whitelisted command name and sanitised arguments are appended.  We
+    # always use shell=False (the default) so no shell expansion occurs.
     argv = _base_argv() + extra_args
     invocation = " ".join(shlex.quote(part) for part in argv)
     try:
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             argv,
             cwd=str(REPO_ROOT),
             capture_output=True,
@@ -128,7 +152,7 @@ def run_command(req: RunRequest) -> RunResponse:
             invocation="",
         )
     try:
-        extra_args = shlex.split(req.args)
+        extra_args = _sanitize_args(req.args)
     except ValueError as exc:
         return RunResponse(
             ok=False,
