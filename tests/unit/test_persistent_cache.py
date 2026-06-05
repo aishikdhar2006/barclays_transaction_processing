@@ -632,7 +632,7 @@ def _sqlite_insert_rows(cache_file, value, num_inserts=1):
                     )
         except sqlite3.OperationalError as e:
             traceback.print_exc()
-            if "database is locked" in str(e):
+            if "database is locked" in str(e) or "unable to open database file" in str(e):
                 time.sleep(1)
                 continue
             else:
