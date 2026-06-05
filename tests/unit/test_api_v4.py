@@ -14,12 +14,14 @@ from banking_tools import api_v4
 class TestCreateSessions:
     def test_create_user_session(self):
         session = api_v4.create_user_session("my_token")
-        assert "OAuth my_token" in session.headers["Authorization"]
+        assert session.headers["Authorization"] == "OAuth my_token"
         session.close()
 
     def test_create_client_session(self):
         session = api_v4.create_client_session()
-        assert "OAuth" in session.headers["Authorization"]
+        assert (
+            session.headers["Authorization"] == f"OAuth {api_v4.MAPILLARY_CLIENT_TOKEN}"
+        )
         session.close()
 
     def test_create_client_session_disable_logging(self):
